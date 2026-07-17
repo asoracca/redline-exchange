@@ -1,0 +1,19 @@
+[build-system]
+requires = ["setuptools>=69"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "redline-exchange"
+version = "0.1.0"
+description = "A deterministic price-time-priority exchange matching engine"
+readme = "README.md"
+requires-python = ">=3.11"
+license = {text = "MIT"}
+authors = [{name = "Anggun Soracca Jaya"}]
+dependencies = []
+
+[project.scripts]
+redline-demo = "orderbook.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
