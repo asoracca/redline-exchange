@@ -27,14 +27,18 @@ class LimitOrderBookTests(unittest.TestCase):
         self.book.submit_limit("ask-high", Side.SELL, 10, 10_200)
         self.book.submit_limit("ask-low", Side.SELL, 10, 10_100)
         trades = self.book.submit_market("buyer", Side.BUY, 15)
-        self.assertEqual([trade.maker_order_id for trade in trades], ["ask-low", "ask-high"])
+        self.assertEqual(
+            [trade.maker_order_id for trade in trades], ["ask-low", "ask-high"]
+        )
         self.assertEqual([trade.quantity for trade in trades], [10, 5])
 
     def test_time_priority_at_same_price(self):
         self.book.submit_limit("first", Side.SELL, 10, 10_100)
         self.book.submit_limit("second", Side.SELL, 10, 10_100)
         trades = self.book.submit_market("buyer", Side.BUY, 15)
-        self.assertEqual([trade.maker_order_id for trade in trades], ["first", "second"])
+        self.assertEqual(
+            [trade.maker_order_id for trade in trades], ["first", "second"]
+        )
 
     def test_market_remainder_does_not_rest(self):
         self.book.submit_limit("ask", Side.SELL, 10, 10_100)
@@ -70,4 +74,3 @@ class LimitOrderBookTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
-
