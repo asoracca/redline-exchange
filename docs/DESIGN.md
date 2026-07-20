@@ -14,19 +14,13 @@ Prices are positive integer ticks. If one tick is one cent, `10100` represents 1
 - Asks: min-heap of positive prices, then arrival sequence.
 - Active orders: dictionary keyed by order ID.
 
-The heap key contains price, arrival sequence, and order ID. Cancellation removes
-the ID from the dictionary. Replacement creates a new sequence when priority is
-lost. Stale heap entries are removed lazily and are considered valid only when
-their complete key matches the active order. This prevents an old heap entry
-from accidentally referring to a replaced order with the same ID.
+The heap key implements price priority and FIFO priority at equal prices. Cancellation removes the ID from the dictionary. Stale heap entries are removed lazily when they reach the top.
 
 ## Complexity
 
 - Submit resting order: `O(log n)`.
 - Best price lookup: amortized `O(log n)` with stale cleanup.
 - Cancellation: `O(1)` dictionary removal.
-- Same-price quantity reduction: `O(1)` and retains priority.
-- Price change or quantity increase: `O(log n)` when the replacement rests.
 - Match: `O(k log n)` for `k` fully consumed resting orders.
 - Depth snapshot: `O(n)` because this educational implementation aggregates active orders on demand.
 
@@ -38,23 +32,20 @@ from accidentally referring to a replaced order with the same ID.
 - every trade uses the resting order's price;
 - filled and canceled orders do not appear in depth;
 - price and time priority determine execution order.
-- active orders have a matching price/sequence/ID heap entry;
-- the book is not crossed after matching completes;
-- trade sequences are strictly increasing;
-- an order cannot trade more than its maximum accepted quantity.
 
 ## Honest limitations
 
 - one process and one symbol per book;
 - no persistence, networking, authentication, or concurrency;
 - no stop, iceberg, pegged, IOC, or FOK orders;
+- no modify operation;
 - depth aggregation is not optimized;
 - benchmark throughput is Python-specific and not exchange-grade latency.
-- replay is strict and single-symbol; it is not a durable event store.
 
 ## Next meaningful extensions
 
-1. Maintain price-level aggregates incrementally.
-2. Add a compact depth and recent-trades visualization.
-3. Publish p99 latency and separate add/cancel/replace workloads.
-4. Reimplement the core in C++ and compare identical event streams.
+1. Add cancel/replace while preserving explicit priority rules.
+2. Replay a CSV stream of add, cancel, and execute events.
+3. Maintain price-level aggregates incrementally.
+4. Publish p50/p95/p99 latency, not only average throughput.
+5. Reimplement the core in C++ and compare identical event streams.
