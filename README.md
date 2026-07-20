@@ -11,10 +11,13 @@ This is a software-engineering project, not a trading-strategy dashboard. It foc
 - price-time priority;
 - partial fills across multiple price levels;
 - cancellation by order ID;
+- cancel/replace with explicit queue-priority rules;
+- deterministic CSV event replay;
 - resting-order (maker) execution prices;
 - top-of-book and depth snapshots;
 - integer price ticks to avoid floating-point money errors;
-- unit tests and a reproducible benchmark.
+- invariant and property-based tests;
+- reproducible throughput, p50, and p95 latency benchmarks.
 
 ## Quickstart
 
@@ -23,12 +26,13 @@ git clone https://github.com/asoracca/redline-exchange.git
 cd redline-exchange
 python -m venv .venv
 source .venv/bin/activate
-python -m pip install -e .
+python -m pip install -e ".[dev]"
 
-python -m unittest discover -s tests -v
+python -m pytest -q
 python -m orderbook.cli
 redline-demo
-python benchmark.py --orders 100000
+redline-replay examples/events.csv --symbol DEMO
+python benchmark.py --orders 10000 100000 1000000 --csv benchmark-results.csv
 ```
 
 On Windows PowerShell, activate the environment with:
@@ -60,28 +64,54 @@ print(book.top_of_book())
 4. Unfilled limit quantity rests on the book.
 5. Unfilled market quantity is canceled rather than resting.
 
+## Replace rules
+
+`replace(order_id, new_quantity, new_price_ticks=None)` treats quantity as the
+new **remaining** quantity.
+
+- Reducing quantity at the same price keeps the original sequence and priority.
+- Increasing quantity loses priority.
+- Changing price loses priority and may immediately trade.
+- Zero quantity is rejected; use `cancel` instead.
+
+Heap entries include price, sequence, and order ID. A stale entry from a cancel
+or replacement cannot be mistaken for the active version of an order.
+
+## Correctness checks
+
+`assert_invariants()` verifies that active orders have valid heap entries, the
+book is not crossed after matching, trade sequences increase, quantities remain
+positive, and no order trades more than its maximum accepted quantity.
+
+The Hypothesis test suite generates randomized submissions, markets, cancels,
+and replacements and checks these invariants after every event.
+
+See [event replay](docs/REPLAY.md) and [benchmark methodology](docs/BENCHMARKS.md).
+
 See [docs/DESIGN.md](docs/DESIGN.md) for the data structures, complexity, and extension plan.
 
-## Market microstructure experiment
+## Market microstructure research
 
-Redline Market Lab adds a deterministic agent-based experiment on top of the
-matching engine. It studies how informed order flow, quote-refresh latency,
-volatility, and inventory constraints affect a simple market maker.
+Redline Market Lab adds deterministic noise traders, informed traders, and an
+inventory-aware market maker on top of the unchanged matching engine. It tests
+how informed flow, quote latency, volatility, and inventory limits affect
+marked P&L and risk.
 
 ```bash
 python run_market_lab.py
+python run_market_study.py
 ```
 
-The runner writes scenario summaries and the baseline path to
-`data/market_lab/`. See [docs/MARKET_LAB.md](docs/MARKET_LAB.md) for the
-methodology and limitations, and [docs/RESULTS.md](docs/RESULTS.md) for the
-first deterministic experiment.
+The second runner repeats five scenarios over 50 common random seeds, reports
+approximate 95% confidence intervals, decomposes P&L into execution edge and
+inventory revaluation, and creates a scenario chart. See
+[the methodology](docs/MARKET_LAB.md) and [results](docs/RESULTS.md).
 
 ## Suggested development sequence
 
-- Version 1: current deterministic engine and tests.
-- Version 2: current deterministic market microstructure simulation.
-- Version 3: WebSocket feed and a small depth visualization.
+- Version 1: deterministic price-time engine and unit tests.
+- Version 2: cancel/replace, CSV replay, invariants, property tests, and latency benchmarks.
+- Version 3: agent-based market microstructure experiments and multi-seed inference.
 - Version 4: C++ implementation and Python/C++ benchmark comparison.
 
 Do not add a trading signal until the engine itself is correct, tested, and measured.

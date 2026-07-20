@@ -14,6 +14,13 @@ class OrderType(str, Enum):
     MARKET = "MARKET"
 
 
+class EventType(str, Enum):
+    LIMIT = "LIMIT"
+    MARKET = "MARKET"
+    CANCEL = "CANCEL"
+    REPLACE = "REPLACE"
+
+
 @dataclass
 class Order:
     order_id: str
@@ -49,3 +56,12 @@ class BookLevel:
     price_ticks: int
     quantity: int
     order_count: int
+
+
+@dataclass(frozen=True)
+class OrderEvent:
+    event_type: EventType
+    order_id: str
+    side: Side | None = None
+    quantity: int | None = None
+    price_ticks: int | None = None

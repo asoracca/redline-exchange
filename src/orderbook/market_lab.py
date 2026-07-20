@@ -80,6 +80,10 @@ class SimulationResult:
                 if total_quantity
                 else 0.0
             ),
+            "execution_edge_pnl_ticks": self.maker_edge_tick_quantity,
+            "inventory_revaluation_pnl_ticks": (
+                final.marked_pnl_ticks - self.maker_edge_tick_quantity
+            ),
         }
 
     def write_records_csv(self, path: str | Path) -> None:
