@@ -90,11 +90,28 @@ See [event replay](docs/REPLAY.md) and [benchmark methodology](docs/BENCHMARKS.m
 
 See [docs/DESIGN.md](docs/DESIGN.md) for the data structures, complexity, and extension plan.
 
+## Market microstructure research
+
+Redline Market Lab adds deterministic noise traders, informed traders, and an
+inventory-aware market maker on top of the unchanged matching engine. It tests
+how informed flow, quote latency, volatility, and inventory limits affect
+marked P&L and risk.
+
+```bash
+python run_market_lab.py
+python run_market_study.py
+```
+
+The second runner repeats five scenarios over 50 common random seeds, reports
+approximate 95% confidence intervals, decomposes P&L into execution edge and
+inventory revaluation, and creates a scenario chart. See
+[the methodology](docs/MARKET_LAB.md) and [results](docs/RESULTS.md).
+
 ## Suggested development sequence
 
 - Version 1: deterministic price-time engine and unit tests.
 - Version 2: cancel/replace, CSV replay, invariants, property tests, and latency benchmarks.
-- Version 3: incremental price-level aggregates and a small depth visualization.
+- Version 3: agent-based market microstructure experiments and multi-seed inference.
 - Version 4: C++ implementation and Python/C++ benchmark comparison.
 
 Do not add a trading signal until the engine itself is correct, tested, and measured.
