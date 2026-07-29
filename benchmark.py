@@ -2,10 +2,10 @@ from __future__ import annotations
 
 import argparse
 import csv
-from dataclasses import asdict, dataclass
-from pathlib import Path
 import random
 import time
+from dataclasses import asdict, dataclass
+from pathlib import Path
 
 from orderbook import LimitOrderBook, Side
 

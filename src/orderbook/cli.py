@@ -4,7 +4,7 @@ from .book import LimitOrderBook
 from .models import Side
 
 
-def money(ticks: int | float | None) -> str:
+def money(ticks: float | None) -> str:
     return "-" if ticks is None else f"${ticks / 100:,.2f}"
 
 

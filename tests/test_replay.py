@@ -1,8 +1,7 @@
-from io import StringIO
 import unittest
+from io import StringIO
 
 from orderbook import Side, read_events, replay_csv
-
 
 EVENTS = """event_type,order_id,side,quantity,price_ticks
 LIMIT,ask-1,SELL,10,10100
