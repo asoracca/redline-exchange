@@ -1,0 +1,3 @@
+implementation,events,trades,active_orders,elapsed_seconds,throughput_per_second,p50_microseconds,p95_microseconds,p99_microseconds
+python,100000,78909,20931,3.034908599918708,32949.92145815481,8.4,51.6,108.1
+cpp,100000,78909,20931,0.425419,235062.373801,2.0,3.0,7.0

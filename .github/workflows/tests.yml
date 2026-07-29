@@ -20,3 +20,32 @@ jobs:
       - run: python benchmark.py --orders 10000
       - run: python run_market_lab.py
       - run: python run_market_study.py
+
+  cpp-engine:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: python -m pip install -e ".[dev]"
+      - run: cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
+      - run: cmake --build build --config Release --parallel
+      - run: ctest --test-dir build --output-on-failure
+      - name: Verify Python/C++ replay parity
+        env:
+          REDLINE_CPP_BINARY: ${{ github.workspace }}/build/redline_cpp
+        run: python -m pytest tests/test_cpp_parity.py -q
+      - name: Run reproducible comparison
+        run: >-
+          python benchmark_cpp.py
+          --binary "${{ github.workspace }}/build/redline_cpp"
+          --orders 10000
+          --output data/cpp_benchmark/comparison.csv
+      - run: >-
+          cmake -S . -B build-sanitize
+          -DCMAKE_BUILD_TYPE=Debug
+          -DREDLINE_ENABLE_SANITIZERS=ON
+      - run: cmake --build build-sanitize --parallel
+      - run: ctest --test-dir build-sanitize --output-on-failure

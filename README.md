@@ -1,6 +1,7 @@
 # Redline Exchange
 
-A deterministic price-time-priority exchange matching engine written in Python.
+A deterministic price-time-priority exchange matching engine implemented in
+Python and C++20.
 
 This is a software-engineering project, not a trading-strategy dashboard. It focuses on data structures, deterministic behavior, invariants, and performance.
 
@@ -17,7 +18,9 @@ This is a software-engineering project, not a trading-strategy dashboard. It foc
 - top-of-book and depth snapshots;
 - integer price ticks to avoid floating-point money errors;
 - invariant and property-based tests;
-- reproducible throughput, p50, and p95 latency benchmarks.
+- cross-language differential tests that compare every trade and active order;
+- reproducible throughput, p50, p95, and p99 latency benchmarks;
+- AddressSanitizer and UndefinedBehaviorSanitizer checks in CI.
 
 ## Quickstart
 
@@ -40,6 +43,31 @@ On Windows PowerShell, activate the environment with:
 ```powershell
 .venv\Scripts\Activate.ps1
 ```
+
+## C++20 engine
+
+The C++ engine implements the same public matching semantics as Python rather
+than a simplified benchmark-only loop. Build and verify it with:
+
+```bash
+cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
+cmake --build build --parallel
+ctest --test-dir build --output-on-failure
+
+REDLINE_CPP_BINARY="$PWD/build/redline_cpp" \
+  python -m pytest tests/test_cpp_parity.py -q
+
+python benchmark_cpp.py \
+  --binary "$PWD/build/redline_cpp" \
+  --orders 100000 \
+  --output data/cpp_benchmark/comparison.csv
+```
+
+The parity fixture exercises limit and market orders, partial fills,
+cancellation, priority-preserving reductions, and priority-losing replacement.
+The test fails if either implementation disagrees on a trade field or the final
+active-order state. See [the C++ design and methodology](docs/CPP_ENGINE.md)
+and [the recorded results](docs/CPP_RESULTS.md).
 
 ## Example
 
@@ -112,6 +140,7 @@ inventory revaluation, and creates a scenario chart. See
 - Version 1: deterministic price-time engine and unit tests.
 - Version 2: cancel/replace, CSV replay, invariants, property tests, and latency benchmarks.
 - Version 3: agent-based market microstructure experiments and multi-seed inference.
-- Version 4: C++ implementation and Python/C++ benchmark comparison.
+- Version 4: C++ implementation, exact Python/C++ parity, sanitizer checks, and
+  benchmark comparison.
 
 Do not add a trading signal until the engine itself is correct, tested, and measured.

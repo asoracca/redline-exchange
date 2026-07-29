@@ -1,9 +1,10 @@
 from __future__ import annotations
 
 import csv
+from contextlib import ExitStack
 from dataclasses import dataclass
 from pathlib import Path
-from typing import TextIO
+from typing import TextIO, cast
 
 from .book import LimitOrderBook
 from .models import EventType, OrderEvent, Side, Trade
@@ -18,11 +19,13 @@ class ReplayResult:
 
 def read_events(source: str | Path | TextIO) -> tuple[OrderEvent, ...]:
     """Parse order events from CSV and report malformed rows precisely."""
-    should_close = not hasattr(source, "read")
-    handle = (
-        Path(source).open("r", newline="", encoding="utf-8") if should_close else source
-    )
-    try:
+    with ExitStack() as stack:
+        if hasattr(source, "read"):
+            handle = cast(TextIO, source)
+        else:
+            handle = stack.enter_context(
+                Path(source).open("r", newline="", encoding="utf-8")
+            )
         reader = csv.DictReader(handle)
         required = ["event_type", "order_id", "side", "quantity", "price_ticks"]
         if reader.fieldnames != required:
@@ -56,9 +59,6 @@ def read_events(source: str | Path | TextIO) -> tuple[OrderEvent, ...]:
                     f"invalid event on CSV line {line_number}: {exc}"
                 ) from exc
         return tuple(events)
-    finally:
-        if should_close:
-            handle.close()
 
 
 def replay_events(

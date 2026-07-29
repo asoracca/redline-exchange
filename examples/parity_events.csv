@@ -1,0 +1,12 @@
+event_type,order_id,side,quantity,price_ticks
+LIMIT,ask-old,SELL,10,10100
+LIMIT,ask-new,SELL,10,10100
+REPLACE,ask-old,,5,
+MARKET,buyer,BUY,7,
+LIMIT,bid-old,BUY,10,9900
+LIMIT,bid-new,BUY,10,9900
+REPLACE,bid-old,,12,
+MARKET,seller,SELL,11,
+LIMIT,ask-shift,SELL,5,10300
+REPLACE,ask-shift,,5,9800
+CANCEL,bid-old,,,

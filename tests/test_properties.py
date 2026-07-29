@@ -1,9 +1,9 @@
 import unittest
 
-from hypothesis import given, settings, strategies as st
+from hypothesis import given, settings
+from hypothesis import strategies as st
 
 from orderbook import LimitOrderBook, Side
-
 
 operation = st.tuples(
     st.integers(min_value=0, max_value=3),
