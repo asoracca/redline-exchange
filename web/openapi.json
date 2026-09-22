@@ -1,0 +1,791 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Redline synthetic exchange",
+    "version": "0.1.0"
+  },
+  "paths": {
+    "/api/snapshot": {
+      "get": {
+        "summary": "Snapshot",
+        "operationId": "snapshot_api_snapshot_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Snapshot"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/commands": {
+      "post": {
+        "summary": "Command",
+        "operationId": "command_api_commands_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/Limit"
+                  },
+                  {
+                    "$ref": "#/components/schemas/Market"
+                  },
+                  {
+                    "$ref": "#/components/schemas/Cancel"
+                  },
+                  {
+                    "$ref": "#/components/schemas/Replace"
+                  },
+                  {
+                    "$ref": "#/components/schemas/Reset"
+                  }
+                ],
+                "title": "Command",
+                "discriminator": {
+                  "propertyName": "kind",
+                  "mapping": {
+                    "LIMIT": "#/components/schemas/Limit",
+                    "MARKET": "#/components/schemas/Market",
+                    "CANCEL": "#/components/schemas/Cancel",
+                    "REPLACE": "#/components/schemas/Replace",
+                    "RESET": "#/components/schemas/Reset"
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Event"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/replay": {
+      "get": {
+        "summary": "Replay",
+        "operationId": "replay_api_replay_get",
+        "parameters": [
+          {
+            "name": "through",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Through"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReplayResult"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/events": {
+      "get": {
+        "summary": "Events",
+        "operationId": "events_api_events_get",
+        "parameters": [
+          {
+            "name": "cursor",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 0,
+              "default": 0,
+              "title": "Cursor"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Book": {
+        "properties": {
+          "bids": {
+            "items": {
+              "$ref": "#/components/schemas/Level"
+            },
+            "type": "array",
+            "title": "Bids"
+          },
+          "asks": {
+            "items": {
+              "$ref": "#/components/schemas/Level"
+            },
+            "type": "array",
+            "title": "Asks"
+          },
+          "orders": {
+            "items": {
+              "$ref": "#/components/schemas/Order"
+            },
+            "type": "array",
+            "title": "Orders"
+          },
+          "trades": {
+            "items": {
+              "$ref": "#/components/schemas/Trade"
+            },
+            "type": "array",
+            "title": "Trades"
+          },
+          "epoch": {
+            "type": "integer",
+            "title": "Epoch"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "bids",
+          "asks",
+          "orders",
+          "trades",
+          "epoch"
+        ],
+        "title": "Book"
+      },
+      "Cancel": {
+        "properties": {
+          "request_id": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9_-]{1,64}$",
+            "title": "Request Id"
+          },
+          "symbol": {
+            "type": "string",
+            "enum": [
+              "AAPL",
+              "MSFT",
+              "NVDA",
+              "DEMO"
+            ],
+            "title": "Symbol"
+          },
+          "kind": {
+            "type": "string",
+            "const": "CANCEL",
+            "title": "Kind"
+          },
+          "order_id": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9_-]{1,64}$",
+            "title": "Order Id"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "request_id",
+          "symbol",
+          "kind",
+          "order_id"
+        ],
+        "title": "Cancel"
+      },
+      "Event": {
+        "properties": {
+          "seq": {
+            "type": "integer",
+            "title": "Seq"
+          },
+          "command": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/Limit"
+              },
+              {
+                "$ref": "#/components/schemas/Market"
+              },
+              {
+                "$ref": "#/components/schemas/Cancel"
+              },
+              {
+                "$ref": "#/components/schemas/Replace"
+              },
+              {
+                "$ref": "#/components/schemas/Reset"
+              }
+            ],
+            "title": "Command",
+            "discriminator": {
+              "propertyName": "kind",
+              "mapping": {
+                "CANCEL": "#/components/schemas/Cancel",
+                "LIMIT": "#/components/schemas/Limit",
+                "MARKET": "#/components/schemas/Market",
+                "REPLACE": "#/components/schemas/Replace",
+                "RESET": "#/components/schemas/Reset"
+              }
+            }
+          },
+          "accepted": {
+            "type": "boolean",
+            "title": "Accepted"
+          },
+          "error": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Error"
+          },
+          "trades": {
+            "items": {
+              "$ref": "#/components/schemas/Trade"
+            },
+            "type": "array",
+            "title": "Trades"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "seq",
+          "command",
+          "accepted",
+          "error",
+          "trades"
+        ],
+        "title": "Event"
+      },
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "type": "array",
+            "title": "Detail"
+          }
+        },
+        "type": "object",
+        "title": "HTTPValidationError"
+      },
+      "Level": {
+        "properties": {
+          "price_ticks": {
+            "type": "integer",
+            "title": "Price Ticks"
+          },
+          "quantity": {
+            "type": "integer",
+            "title": "Quantity"
+          },
+          "order_count": {
+            "type": "integer",
+            "title": "Order Count"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "price_ticks",
+          "quantity",
+          "order_count"
+        ],
+        "title": "Level"
+      },
+      "Limit": {
+        "properties": {
+          "request_id": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9_-]{1,64}$",
+            "title": "Request Id"
+          },
+          "symbol": {
+            "type": "string",
+            "enum": [
+              "AAPL",
+              "MSFT",
+              "NVDA",
+              "DEMO"
+            ],
+            "title": "Symbol"
+          },
+          "kind": {
+            "type": "string",
+            "const": "LIMIT",
+            "title": "Kind"
+          },
+          "order_id": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9_-]{1,64}$",
+            "title": "Order Id"
+          },
+          "side": {
+            "type": "string",
+            "enum": [
+              "BUY",
+              "SELL"
+            ],
+            "title": "Side"
+          },
+          "quantity": {
+            "type": "integer",
+            "maximum": 1000000.0,
+            "minimum": 1.0,
+            "title": "Quantity"
+          },
+          "price_ticks": {
+            "type": "integer",
+            "maximum": 1000000.0,
+            "minimum": 1.0,
+            "title": "Price Ticks"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "request_id",
+          "symbol",
+          "kind",
+          "order_id",
+          "side",
+          "quantity",
+          "price_ticks"
+        ],
+        "title": "Limit"
+      },
+      "Market": {
+        "properties": {
+          "request_id": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9_-]{1,64}$",
+            "title": "Request Id"
+          },
+          "symbol": {
+            "type": "string",
+            "enum": [
+              "AAPL",
+              "MSFT",
+              "NVDA",
+              "DEMO"
+            ],
+            "title": "Symbol"
+          },
+          "kind": {
+            "type": "string",
+            "const": "MARKET",
+            "title": "Kind"
+          },
+          "order_id": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9_-]{1,64}$",
+            "title": "Order Id"
+          },
+          "side": {
+            "type": "string",
+            "enum": [
+              "BUY",
+              "SELL"
+            ],
+            "title": "Side"
+          },
+          "quantity": {
+            "type": "integer",
+            "maximum": 1000000.0,
+            "minimum": 1.0,
+            "title": "Quantity"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "request_id",
+          "symbol",
+          "kind",
+          "order_id",
+          "side",
+          "quantity"
+        ],
+        "title": "Market"
+      },
+      "Order": {
+        "properties": {
+          "order_id": {
+            "type": "string",
+            "title": "Order Id"
+          },
+          "side": {
+            "type": "string",
+            "enum": [
+              "BUY",
+              "SELL"
+            ],
+            "title": "Side"
+          },
+          "order_type": {
+            "type": "string",
+            "enum": [
+              "LIMIT",
+              "MARKET"
+            ],
+            "title": "Order Type"
+          },
+          "quantity": {
+            "type": "integer",
+            "title": "Quantity"
+          },
+          "remaining": {
+            "type": "integer",
+            "title": "Remaining"
+          },
+          "sequence": {
+            "type": "integer",
+            "title": "Sequence"
+          },
+          "price_ticks": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Price Ticks"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "order_id",
+          "side",
+          "order_type",
+          "quantity",
+          "remaining",
+          "sequence",
+          "price_ticks"
+        ],
+        "title": "Order"
+      },
+      "Replace": {
+        "properties": {
+          "request_id": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9_-]{1,64}$",
+            "title": "Request Id"
+          },
+          "symbol": {
+            "type": "string",
+            "enum": [
+              "AAPL",
+              "MSFT",
+              "NVDA",
+              "DEMO"
+            ],
+            "title": "Symbol"
+          },
+          "kind": {
+            "type": "string",
+            "const": "REPLACE",
+            "title": "Kind"
+          },
+          "order_id": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9_-]{1,64}$",
+            "title": "Order Id"
+          },
+          "quantity": {
+            "type": "integer",
+            "maximum": 1000000.0,
+            "minimum": 1.0,
+            "title": "Quantity"
+          },
+          "price_ticks": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "maximum": 1000000.0,
+                "minimum": 1.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Price Ticks"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "request_id",
+          "symbol",
+          "kind",
+          "order_id",
+          "quantity"
+        ],
+        "title": "Replace"
+      },
+      "ReplayResult": {
+        "properties": {
+          "verified": {
+            "type": "boolean",
+            "title": "Verified"
+          },
+          "snapshot": {
+            "$ref": "#/components/schemas/Snapshot"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "verified",
+          "snapshot"
+        ],
+        "title": "ReplayResult"
+      },
+      "Reset": {
+        "properties": {
+          "request_id": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9_-]{1,64}$",
+            "title": "Request Id"
+          },
+          "symbol": {
+            "type": "string",
+            "enum": [
+              "AAPL",
+              "MSFT",
+              "NVDA",
+              "DEMO"
+            ],
+            "title": "Symbol"
+          },
+          "kind": {
+            "type": "string",
+            "const": "RESET",
+            "title": "Kind"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "request_id",
+          "symbol",
+          "kind"
+        ],
+        "title": "Reset"
+      },
+      "Snapshot": {
+        "properties": {
+          "session_id": {
+            "type": "string",
+            "title": "Session Id"
+          },
+          "seq": {
+            "type": "integer",
+            "title": "Seq"
+          },
+          "mode": {
+            "type": "string",
+            "const": "synthetic simulation",
+            "title": "Mode",
+            "default": "synthetic simulation"
+          },
+          "backend": {
+            "type": "string",
+            "enum": [
+              "python",
+              "cpp"
+            ],
+            "title": "Backend"
+          },
+          "books": {
+            "additionalProperties": {
+              "$ref": "#/components/schemas/Book"
+            },
+            "type": "object",
+            "title": "Books"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "session_id",
+          "seq",
+          "backend",
+          "books"
+        ],
+        "title": "Snapshot"
+      },
+      "Trade": {
+        "properties": {
+          "sequence": {
+            "type": "integer",
+            "title": "Sequence"
+          },
+          "symbol": {
+            "type": "string",
+            "enum": [
+              "AAPL",
+              "MSFT",
+              "NVDA",
+              "DEMO"
+            ],
+            "title": "Symbol"
+          },
+          "price_ticks": {
+            "type": "integer",
+            "title": "Price Ticks"
+          },
+          "quantity": {
+            "type": "integer",
+            "title": "Quantity"
+          },
+          "maker_order_id": {
+            "type": "string",
+            "title": "Maker Order Id"
+          },
+          "taker_order_id": {
+            "type": "string",
+            "title": "Taker Order Id"
+          },
+          "taker_side": {
+            "type": "string",
+            "enum": [
+              "BUY",
+              "SELL"
+            ],
+            "title": "Taker Side"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "sequence",
+          "symbol",
+          "price_ticks",
+          "quantity",
+          "maker_order_id",
+          "taker_order_id",
+          "taker_side"
+        ],
+        "title": "Trade"
+      },
+      "ValidationError": {
+        "properties": {
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "Location"
+          },
+          "msg": {
+            "type": "string",
+            "title": "Message"
+          },
+          "type": {
+            "type": "string",
+            "title": "Error Type"
+          },
+          "input": {
+            "title": "Input"
+          },
+          "ctx": {
+            "type": "object",
+            "title": "Context"
+          }
+        },
+        "type": "object",
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "title": "ValidationError"
+      }
+    }
+  }
+}

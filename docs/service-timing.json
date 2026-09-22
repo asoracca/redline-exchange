@@ -1,0 +1,41 @@
+{
+  "python": "3.12.14 (main, Aug 25 2026, 13:50:33) [Clang 22.1.3 ]",
+  "platform": "macOS-26.5.1-arm64-arm-64bit",
+  "dependencies": {
+    "fastapi": "0.141.1",
+    "pydantic": "2.13.5",
+    "uvicorn": "0.53.0"
+  },
+  "workload": "No RNG: i=0..N-1; BUY 1 at 10000+i ticks, unique IDs",
+  "units": "microseconds",
+  "results": {
+    "python": {
+      "core_api": {
+        "samples": 200,
+        "p50_us": 1.417,
+        "p95_us": 2.959
+      },
+      "service_with_sqlite": {
+        "samples": 200,
+        "p50_us": 346.8955,
+        "p95_us": 695.334
+      }
+    },
+    "cpp": {
+      "core_api": {
+        "samples": 200,
+        "p50_us": 0.709,
+        "p95_us": 2.375
+      },
+      "service_with_sqlite": {
+        "samples": 200,
+        "p50_us": 351.958,
+        "p95_us": 615.875
+      }
+    }
+  },
+  "command": "python scripts/measure_service.py --events 200",
+  "recorded_date": "2026-09-22",
+  "compiler": "Zig 0.13.0 / Clang 18.1.6, -O3 -DNDEBUG -std=c++17 -target aarch64-macos.14.0",
+  "limitations": "One sequential pass per backend, no warmup, no RNG, no HTTP; service includes SQLite FULL commit. Not a capacity estimate."
+}
