@@ -13,7 +13,7 @@ jobs:
         with:
           python-version: "3.12"
           cache: pip
-      - run: python -m pip install -e ".[dev,research]"
+      - run: python -m pip install -e ".[dev,research,demo]"
       - run: python -m ruff format --check .
       - run: python -m ruff check .
       - run: python -m pytest -q
@@ -31,7 +31,7 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
-      - run: python -m pip install -e ".[dev,native,research]"
+      - run: python -m pip install -e ".[dev,native,research,demo]"
       - run: python scripts/build_native.py
       # Fail explicitly if the extension is missing; parity tests must not skip.
       - run: python -c "from orderbook import _native; print(_native.compiler)"
@@ -49,3 +49,34 @@ jobs:
           path: |
             benchmark-results/
             profile-results/
+
+  exchange-demo:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - uses: pnpm/action-setup@v4
+        with:
+          version: "11.19.0"
+      - run: python -m venv .venv
+      - run: .venv/bin/python -m pip install -e ".[dev,demo]"
+      - run: .venv/bin/python -m pytest tests/test_exchange.py -q
+      - run: .venv/bin/python scripts/export_contracts.py
+      - run: pnpm --dir web install --frozen-lockfile
+      - run: pnpm --dir web exec openapi-typescript openapi.json -o src/contracts.d.ts
+      - run: git diff --exit-code -- web/openapi.json web/src/contracts.d.ts
+      - run: pnpm --dir web run build
+      - run: pnpm --dir web exec playwright install --with-deps chromium
+      - run: pnpm --dir web test
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: exchange-browser-results
+          path: |
+            web/test-results/
+            docs/assets/exchange-lab.png
