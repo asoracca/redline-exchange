@@ -1,0 +1,3 @@
+Python traced bytes (separate pass, prepared input excluded): retained=10258214, peak=11984326
+active_orders=6800
+Not process RSS; no inference about native allocations.

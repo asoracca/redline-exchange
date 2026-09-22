@@ -9,3 +9,12 @@ dist/
 build/
 *.egg-info/
 data/
+*.so
+*.dylib
+*.pyd
+native-build.json
+benchmark-results/
+profile-results/
+*.prof
+
+.DS_Store

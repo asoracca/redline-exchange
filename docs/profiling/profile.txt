@@ -1,0 +1,65 @@
+workload=mixed events=100000 seed=17
+         2736485 function calls in 1.035 seconds
+
+   Ordered by: cumulative time
+   List reduced from 34 to 25 due to restriction <25>
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+        1    0.052    0.052    1.109    1.109 workloads.py:71(replay)
+   100000    0.049    0.000    1.041    0.000 workloads.py:61(apply)
+    82798    0.065    0.000    0.751    0.000 book.py:34(submit_limit)
+    98940    0.195    0.000    0.573    0.000 book.py:248(_match)
+    97888    0.198    0.000    0.262    0.000 book.py:215(_new_order)
+    15090    0.008    0.000    0.214    0.000 book.py:57(submit_market)
+   192610    0.107    0.000    0.191    0.000 book.py:296(_discard_stale_top)
+   145676    0.047    0.000    0.151    0.000 book.py:290(_best_opposite)
+    55834    0.028    0.000    0.052    0.000 book.py:283(_rest)
+   248428    0.035    0.000    0.035    0.000 book.py:308(_heap_entry)
+   240831    0.030    0.000    0.030    0.000 {method 'get' of 'dict' objects}
+    47185    0.027    0.000    0.027    0.000 {built-in method _heapq.heappop}
+   182814    0.024    0.000    0.024    0.000 book.py:318(_integer)
+   145651    0.021    0.000    0.021    0.000 book.py:276(_crosses)
+    55834    0.017    0.000    0.017    0.000 {built-in method _heapq.heappush}
+   197888    0.016    0.000    0.016    0.000 {built-in method builtins.isinstance}
+    97888    0.016    0.000    0.016    0.000 {method 'add' of 'set' objects}
+    89838    0.015    0.000    0.015    0.000 {built-in method builtins.min}
+    98936    0.015    0.000    0.015    0.000 <string>:2(__init__)
+    89838    0.013    0.000    0.013    0.000 {method 'append' of 'list' objects}
+    97888    0.012    0.000    0.012    0.000 {method 'strip' of 'str' objects}
+   108384    0.011    0.000    0.011    0.000 {built-in method builtins.getattr}
+     1064    0.003    0.000    0.010    0.000 book.py:80(replace)
+    98952    0.009    0.000    0.009    0.000 {built-in method builtins.len}
+    89838    0.008    0.000    0.008    0.000 models.py:38(is_filled)
+
+
+         2736485 function calls in 1.035 seconds
+
+   Ordered by: internal time
+   List reduced from 34 to 25 due to restriction <25>
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+    97888    0.198    0.000    0.262    0.000 book.py:215(_new_order)
+    98940    0.195    0.000    0.573    0.000 book.py:248(_match)
+   192610    0.107    0.000    0.191    0.000 book.py:296(_discard_stale_top)
+    82798    0.065    0.000    0.751    0.000 book.py:34(submit_limit)
+        1    0.052    0.052    1.109    1.109 workloads.py:71(replay)
+   100000    0.049    0.000    1.041    0.000 workloads.py:61(apply)
+   145676    0.047    0.000    0.151    0.000 book.py:290(_best_opposite)
+   248428    0.035    0.000    0.035    0.000 book.py:308(_heap_entry)
+   240831    0.030    0.000    0.030    0.000 {method 'get' of 'dict' objects}
+    55834    0.028    0.000    0.052    0.000 book.py:283(_rest)
+    47185    0.027    0.000    0.027    0.000 {built-in method _heapq.heappop}
+   182814    0.024    0.000    0.024    0.000 book.py:318(_integer)
+   145651    0.021    0.000    0.021    0.000 book.py:276(_crosses)
+    55834    0.017    0.000    0.017    0.000 {built-in method _heapq.heappush}
+   197888    0.016    0.000    0.016    0.000 {built-in method builtins.isinstance}
+    97888    0.016    0.000    0.016    0.000 {method 'add' of 'set' objects}
+    89838    0.015    0.000    0.015    0.000 {built-in method builtins.min}
+    98936    0.015    0.000    0.015    0.000 <string>:2(__init__)
+    89838    0.013    0.000    0.013    0.000 {method 'append' of 'list' objects}
+    97888    0.012    0.000    0.012    0.000 {method 'strip' of 'str' objects}
+   108384    0.011    0.000    0.011    0.000 {built-in method builtins.getattr}
+    98952    0.009    0.000    0.009    0.000 {built-in method builtins.len}
+    89838    0.008    0.000    0.008    0.000 models.py:38(is_filled)
+    49034    0.008    0.000    0.008    0.000 {method 'pop' of 'dict' objects}
+    15090    0.008    0.000    0.214    0.000 book.py:57(submit_market)

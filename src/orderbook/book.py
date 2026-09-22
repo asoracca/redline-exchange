@@ -39,6 +39,7 @@ class LimitOrderBook:
         price_ticks: int,
     ) -> list[Trade]:
         """Submit a limit order and return trades produced immediately."""
+        self._integer(price_ticks, "price_ticks")
         if price_ticks <= 0:
             raise ValueError("price_ticks must be positive")
         order = self._new_order(
@@ -89,6 +90,9 @@ class LimitOrderBook:
         priority. Increasing quantity or changing price receives a new
         sequence number and therefore loses time priority.
         """
+        self._integer(new_quantity, "new_quantity")
+        if new_price_ticks is not None:
+            self._integer(new_price_ticks, "new_price_ticks")
         if new_quantity <= 0:
             raise ValueError("new_quantity must be positive; use cancel instead")
         order = self._orders.get(order_id)
@@ -224,6 +228,7 @@ class LimitOrderBook:
             raise ValueError(f"duplicate active order_id: {order_id}")
         if order_id in self._seen_order_ids:
             raise ValueError(f"order_id has already been used: {order_id}")
+        self._integer(quantity, "quantity")
         if quantity <= 0:
             raise ValueError("quantity must be positive")
         self._order_sequence += 1
@@ -309,3 +314,8 @@ class LimitOrderBook:
             order.sequence,
             order.order_id,
         )
+
+    @staticmethod
+    def _integer(value: int, name: str) -> None:
+        if type(value) is not int:
+            raise TypeError(f"{name} must be an integer")

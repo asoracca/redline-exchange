@@ -20,3 +20,32 @@ jobs:
       - run: python benchmark.py --orders 10000
       - run: python run_market_lab.py
       - run: python run_market_study.py
+
+  native-parity:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.11", "3.12", "3.13"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - run: python -m pip install -e ".[dev,native,research]"
+      - run: python scripts/build_native.py
+      # Fail explicitly if the extension is missing; parity tests must not skip.
+      - run: python -c "from orderbook import _native; print(_native.compiler)"
+      - run: python -m pytest -q
+      - name: Native memory and undefined-behavior checks
+        run: |
+          c++ -std=c++17 -g -O1 -fsanitize=address,undefined -fno-omit-frame-pointer cpp/test_core.cpp -o /tmp/redline-core-test
+          /tmp/redline-core-test
+      - run: python compare.py --orders 1000 --repeats 2 --output benchmark-results
+      - run: python profile_matching.py --orders 1000
+      - run: python study.py --orders 1000 --repeats 2 --seeds 17 42 --output benchmark-results/study-smoke
+      - uses: actions/upload-artifact@v4
+        with:
+          name: native-smoke-${{ matrix.python-version }}
+          path: |
+            benchmark-results/
+            profile-results/
