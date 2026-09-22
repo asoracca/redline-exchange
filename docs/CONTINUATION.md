@@ -53,13 +53,8 @@ CPU pinning is claimed. No raw trial was discarded.
 
 ## Scope and delivery
 
-The current public READMEs were checked again; their hashes match the earlier
-audit. [The audit](PORTFOLIO_AUDIT.md) retains concrete recommendations for all
-other public repos and records the limits of that review. No profile metadata,
-unrelated repository or website files were edited.
-
-At that preparation stage, work was local on `codex/python-cpp-portfolio`, based on
-`0856f00d4ba198c1c6a15572d8b5a1e8b67f8917`; nothing had been pushed or merged at that stage.
+The preparation was based on commit
+`0856f00d4ba198c1c6a15572d8b5a1e8b67f8917`.
 The initial archive is preserved. The continued source archive and patch include
 this follow-up, with every file explained in [CHANGES.md](CHANGES.md).
 

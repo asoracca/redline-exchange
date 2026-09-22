@@ -117,3 +117,11 @@ version on the machine re-rendering the table.
 Profiling also saves `profile.json` with source/input hashes, timestamp,
 environment, function timings and traced allocations. Regenerate profiles after
 changing source. Its measurements still describe instrumented Python execution.
+
+## Published build paths
+
+In the checked-in benchmark JSON, `${PROJECT_ROOT}` and `${PYTHON_ROOT}`
+replace machine-specific absolute directory prefixes in recorded build commands.
+These are path placeholders, not literal paths used during measurement. Trial
+values, compiler flags and versions, source hashes, and binary hashes are unchanged.
+Fresh local runs retain their own build metadata for provenance validation.

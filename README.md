@@ -187,7 +187,6 @@ Next experiments: larger/multiple-seed workloads, heap compaction under long-liv
 churn, and separately measured depth aggregation or batch bindings. Keep research
 in Python and let profiling determine which additional work belongs in C++.
 
-[Repository/profile audit](docs/PORTFOLIO_AUDIT.md) ·
-[Continuation specification](docs/CODEX_SPEC.md) · [Every file changed](docs/CHANGES.md)
+[Implementation changes](docs/CHANGES.md)
 
 [Follow-up validation and changes](docs/CONTINUATION.md)

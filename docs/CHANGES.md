@@ -1,9 +1,8 @@
 # File-by-file changes
 
 Base: `0856f00d4ba198c1c6a15572d8b5a1e8b67f8917`.
-The initial work was prepared on `codex/python-cpp-portfolio`. Shipping uses
-`ship/python-cpp-improvements`; see [shipping validation](SHIPPING.md) for the
-fresh build and measurements. The initial archives remain historical snapshots.
+See [shipping validation](SHIPPING.md) for the fresh build and measurements.
+The initial archives remain historical snapshots.
 
 ## Modified files
 
@@ -39,8 +38,6 @@ fresh build and measurements. The initial archives remain historical snapshots.
 |---|---|
 | `docs/NATIVE.md` | Build requirements, Python/C++ interface, bounds, complexity and native limitations |
 | `docs/PROFILING.md` | Interpret actual function/allocation measurements and run variability |
-| `docs/PORTFOLIO_AUDIT.md` | Current repo/profile findings, source links, specific recommendations for all other public repos, and validation scope |
-| `docs/CODEX_SPEC.md` | Detailed reusable implementation/continuation prompt with acceptance criteria |
 | `docs/CHANGES.md` | This complete change inventory |
 | `docs/performance/results.json` | Every measured trial, per-operation latency, source/input hashes, parity digests and environment/build metadata |
 | `docs/performance/results.csv` | Tabular raw trial measurements |
@@ -89,9 +86,6 @@ The newest source archive is `redline-exchange-continued.zip` and its patch is
 | `README.md` | Refresh measured results and link the three-seed study |
 | `docs/BENCHMARKS.md` | Document build checks, trial ranges and multiple-seed protocol |
 | `docs/NATIVE.md` | Explain failure-safe builds and provenance checks |
-| `docs/CODEX_SPEC.md` | Add continuation instructions for the new checks/study |
-| `docs/PORTFOLIO_AUDIT.md` | Record rechecked README sources and follow-up findings |
-| `docs/profile-readme-sources.json` | Current public README URLs and content hashes for all nine repos |
 | `docs/CONTINUATION.md` | Follow-up outcome, scope, validation and measured interpretation |
 | `docs/PROFILING.md` | Interpret the regenerated profile with current source metadata |
 | `docs/performance/results.json` | Refresh every first-seed raw trial and strict build metadata |
@@ -127,5 +121,4 @@ and results are in `docs/CONTINUATION.md`; the current validation is in
 | `docs/performance/` | Regenerate all 12 recorded workload/seed combinations, raw trials, summaries and chart |
 | `docs/profiling/` | Regenerate profiling rankings, memory figures and source/environment metadata |
 | `docs/CONTINUATION.md` | Mark the earlier continuation as historical and link shipping validation |
-| `docs/PORTFOLIO_AUDIT.md` | Retain the dated audit and point publication readers to shipping validation |
 | `docs/CHANGES.md` | Record this shipping refresh |
