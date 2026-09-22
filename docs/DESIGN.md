@@ -22,13 +22,16 @@ from accidentally referring to a replaced order with the same ID.
 
 ## Complexity
 
+In heap operations below, `n` counts heap entries, including stale entries,
+not just active orders. Hash-map operations are expected, not worst-case, O(1).
+
 - Submit resting order: `O(log n)`.
 - Best price lookup: amortized `O(log n)` with stale cleanup.
 - Cancellation: `O(1)` dictionary removal.
 - Same-price quantity reduction: `O(1)` and retains priority.
 - Price change or quantity increase: `O(log n)` when the replacement rests.
 - Match: `O(k log n)` for `k` fully consumed resting orders.
-- Depth snapshot: `O(n)` because this educational implementation aggregates active orders on demand.
+- Depth snapshot: `O(A + L log L)` for `A` active orders and `L` occupied price levels; aggregation is followed by sorting.
 
 ## Invariants
 
@@ -49,12 +52,21 @@ from accidentally referring to a replaced order with the same ID.
 - no persistence, networking, authentication, or concurrency;
 - no stop, iceberg, pegged, IOC, or FOK orders;
 - depth aggregation is not optimized;
-- benchmark throughput is Python-specific and not exchange-grade latency.
+- benchmark throughput is synthetic API throughput, not exchange-grade latency.
+- seen IDs and accounting persist for the book lifetime; lazy heaps can retain canceled entries.
 - replay is strict and single-symbol; it is not a durable event store.
+
+## Optional native backend
+
+The Python API and research code remain the default. The independent C++17 core
+mirrors the heaps, ID map, replacement rules and invariant accounting. A small
+pybind11 adapter returns the existing Python dataclasses. See [native design and
+contract](NATIVE.md), [measured comparison](performance/SUMMARY.md), and
+[profiling evidence](PROFILING.md).
 
 ## Next meaningful extensions
 
-1. Maintain price-level aggregates incrementally.
-2. Add a compact depth and recent-trades visualization.
-3. Publish p99 latency and separate add/cancel/replace workloads.
-4. Reimplement the core in C++ and compare identical event streams.
+1. Benchmark incremental price-level aggregates for snapshot-heavy research.
+2. Study periodic heap compaction against lazy cancellation under sustained churn.
+3. Measure multiple seeds, larger counts and per-process memory separately.
+4. Add a batched binding or standalone C++ runner with a separately labeled metric.
