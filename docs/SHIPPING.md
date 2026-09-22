@@ -65,12 +65,12 @@ were produced again for this shipping run; no earlier timings were reused.
 
 ## Publication and hosted checks
 
-Local publication attempt: Git had no HTTPS credentials, and the connected
-GitHub app rejected repository writes with HTTP 403 (`Resource not accessible
-by integration`). Publishing and hosted CI therefore require GitHub write access.
-No remote branch or pull request was created by that attempt.
+Published on 2026-09-22 in [pull request #4](https://github.com/asoracca/redline-exchange/pull/4)
+against `main`. The pull request is open for review and has not been merged.
+The implementation commit is `c3ae67534c83c4aac56f943940e36152bb0ba44f`.
+The first publication attempt lacked GitHub write access; completing GitHub CLI
+sign-in resolved that issue.
 
-This branch is intended for an open pull request against `main`, without merging.
 The PR's Checks tab is the source of truth for hosted results. Linux CI includes
 Python-only validation, native parity on Python 3.11/3.12/3.13, address/undefined-
 behavior sanitizers, and benchmark/profile/study smoke runs. Local results above

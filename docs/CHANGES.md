@@ -121,7 +121,7 @@ and results are in `docs/CONTINUATION.md`; the current validation is in
 |---|---|
 | `.gitignore` | Ignore `.DS_Store` while preserving the local Finder files |
 | `README.md` | Replace previous timings with the 2026-09-21 run and identify hardware, date, compiler target and reproduction command |
-| `docs/SHIPPING.md` | Record fresh environment/build/testing, compiler-target workaround and the new measurements |
+| `docs/SHIPPING.md` | Record fresh environment/build/testing, compiler-target workaround, new measurements and the published PR |
 | `docs/NATIVE.md` | Document the verified arm64 macOS compiler target |
 | `docs/PROFILING.md` | Interpret the shipping profile instead of earlier timings |
 | `docs/performance/` | Regenerate all 12 recorded workload/seed combinations, raw trials, summaries and chart |
