@@ -1,0 +1,84 @@
+import { test, expect } from "@playwright/test";
+import { writeFileSync } from "node:fs";
+
+test("real offline study, evidence, history, narrow screen and failure state", async ({
+  page,
+}) => {
+  const errors: string[] = [];
+  page.on("pageerror", (e) => errors.push(e.message));
+  await page.goto("/");
+  await expect(
+    page.getByText("SCRIPTED PLANNING", { exact: true }),
+  ).toBeVisible();
+  await expect(page.locator("#question")).toHaveValue(/quote latency/);
+  const started = Date.now();
+  await page.getByRole("button", { name: "Run experiment" }).click();
+  await expect(
+    page.getByRole("heading", { name: "Evidence, ready to inspect" }),
+  ).toBeVisible({ timeout: 15000 });
+  await expect(page.getByRole("table")).toBeVisible();
+  await expect(page.locator(".report")).toContainText("-3186.67");
+  await expect(page.locator(".chart")).toBeVisible();
+  await expect(page.locator(".chart")).toHaveJSProperty("complete", true);
+  writeFileSync(
+    "test-results/research-ui-latency.json",
+    JSON.stringify(
+      {
+        action: "click to completed findings visible",
+        milliseconds: Date.now() - started,
+        mode: "offline scripted",
+        viewport: "1440x1200",
+        note: "One browser sample; includes polling and local worker, not core API timing",
+      },
+      null,
+      2,
+    ),
+  );
+  await page.screenshot({
+    path: "../docs/assets/research-copilot.png",
+    fullPage: true,
+    animations: "disabled",
+  });
+  await page.getByRole("button", { name: "Plan", exact: true }).click();
+  await expect(page.locator(".panel pre")).toContainText(
+    "quote_refresh_interval",
+  );
+  await page.getByRole("button", { name: "Activity & usage" }).click();
+  await expect(page.locator(".metrics")).toContainText("Unavailable");
+  await expect(
+    page.getByText("run_simulation_batch", { exact: false }).first(),
+  ).toBeVisible();
+  await page.getByRole("button", { name: "Artifacts", exact: true }).click();
+  const report = page
+    .locator(".artifact-grid")
+    .getByRole("link", { name: "report.md" });
+  const response = await page.request.get((await report.getAttribute("href"))!);
+  expect(await response.text()).toContain("slow_quotes.ending_pnl_ticks");
+  await page.reload();
+  await page.locator(".history-item").first().click();
+  await expect(
+    page.getByRole("heading", { name: "Evidence, ready to inspect" }),
+  ).toBeVisible();
+  await page
+    .getByText("Resource limits & mode details", { exact: true })
+    .click();
+  await page.getByRole("spinbutton", { name: "Maximum work units" }).fill("40");
+  await page.getByRole("button", { name: "Run experiment" }).click();
+  await expect(
+    page.getByRole("heading", { name: "Run needs attention" }),
+  ).toBeVisible();
+  await expect(page.getByRole("alert")).toContainText("computational budget");
+  await expect(
+    page.getByRole("button", { name: "Resume checkpoints" }),
+  ).toBeVisible();
+  await page.setViewportSize({ width: 390, height: 844 });
+  expect(
+    await page.evaluate(
+      () => document.documentElement.scrollWidth <= innerWidth,
+    ),
+  ).toBe(true);
+  await expect(
+    page.getByRole("heading", { name: "Run needs attention" }),
+  ).toBeVisible();
+  expect(errors).toEqual([]);
+});

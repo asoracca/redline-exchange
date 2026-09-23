@@ -1,0 +1,7 @@
+{
+  "action": "click to completed findings visible",
+  "milliseconds": 891,
+  "mode": "offline scripted",
+  "viewport": "1440x1200",
+  "note": "One browser sample; includes polling and local worker, not core API timing"
+}

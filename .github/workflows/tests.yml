@@ -73,6 +73,8 @@ jobs:
       - run: pnpm --dir web run build
       - run: pnpm --dir web exec playwright install --with-deps chromium
       - run: pnpm --dir web test
+      - run: pnpm --dir web run test:research
+      - run: .venv/bin/python -m research_copilot.evaluate --output /tmp/research-evaluation
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -80,3 +82,5 @@ jobs:
           path: |
             web/test-results/
             docs/assets/exchange-lab.png
+            docs/assets/research-copilot.png
+            /tmp/research-evaluation/

@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "build": "tsc --noEmit && vite build",
-    "test": "playwright test"
+    "test": "playwright test",
+    "test:research": "playwright test --config copilot.playwright.config.ts"
   },
   "dependencies": {
     "react": "19.2.0",

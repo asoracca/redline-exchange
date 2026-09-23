@@ -1,0 +1,96 @@
+{
+  "seeds": [
+    17,
+    42,
+    73
+  ],
+  "count": 100000,
+  "repeats": 5,
+  "source_sha256": "2465ab3c066be4b88dfadcb2b70970b871813c5c78975cbff3bc383353edaed5",
+  "rows": [
+    {
+      "seed": 17,
+      "workload": "crossing",
+      "python_events_per_second": 277118.0190468923,
+      "cpp_events_per_second": 432066.53700234677,
+      "speedup": 1.5591427020457842
+    },
+    {
+      "seed": 17,
+      "workload": "resting",
+      "python_events_per_second": 336297.563186512,
+      "cpp_events_per_second": 932937.3561579692,
+      "speedup": 2.774142480600011
+    },
+    {
+      "seed": 17,
+      "workload": "cancel_replace",
+      "python_events_per_second": 883728.5660584054,
+      "cpp_events_per_second": 1151042.700806593,
+      "speedup": 1.3024844335862749
+    },
+    {
+      "seed": 17,
+      "workload": "mixed",
+      "python_events_per_second": 262463.0865681552,
+      "cpp_events_per_second": 387314.85744634597,
+      "speedup": 1.4756926869629334
+    },
+    {
+      "seed": 42,
+      "workload": "crossing",
+      "python_events_per_second": 276397.0715243813,
+      "cpp_events_per_second": 429786.49577908614,
+      "speedup": 1.554960381485714
+    },
+    {
+      "seed": 42,
+      "workload": "resting",
+      "python_events_per_second": 352880.4606888291,
+      "cpp_events_per_second": 926544.6947788048,
+      "speedup": 2.6256616559901693
+    },
+    {
+      "seed": 42,
+      "workload": "cancel_replace",
+      "python_events_per_second": 856351.6444978778,
+      "cpp_events_per_second": 1150369.0527717425,
+      "speedup": 1.3433372378776267
+    },
+    {
+      "seed": 42,
+      "workload": "mixed",
+      "python_events_per_second": 272199.02103622083,
+      "cpp_events_per_second": 399599.46706857637,
+      "speedup": 1.4680415291258622
+    },
+    {
+      "seed": 73,
+      "workload": "crossing",
+      "python_events_per_second": 286955.8477422258,
+      "cpp_events_per_second": 423898.1770466606,
+      "speedup": 1.4772243896818962
+    },
+    {
+      "seed": 73,
+      "workload": "resting",
+      "python_events_per_second": 339595.2824319896,
+      "cpp_events_per_second": 936172.5336770983,
+      "speedup": 2.756730090514684
+    },
+    {
+      "seed": 73,
+      "workload": "cancel_replace",
+      "python_events_per_second": 904506.0256065837,
+      "cpp_events_per_second": 1134008.6354757592,
+      "speedup": 1.2537325383932798
+    },
+    {
+      "seed": 73,
+      "workload": "mixed",
+      "python_events_per_second": 272595.8384134521,
+      "cpp_events_per_second": 402993.43523694,
+      "speedup": 1.4783550533361811
+    }
+  ]
+}
