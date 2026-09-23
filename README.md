@@ -96,7 +96,7 @@ pnpm --dir web test
 pnpm --dir web run test:research
 ```
 
-Local validation: **131 Python tests passed**, including original regressions
+Local validation: **136 Python tests passed**, including original regressions
 and native parity. Research and exchange browser flows passed. The versioned
 suite has five supported, three ambiguous, three unsupported, three injection
 and two insufficient-evidence cases. Both scripted workflows passed **16/16**;
