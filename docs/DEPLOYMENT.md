@@ -1,5 +1,13 @@
 # Free public demo deployment
 
+[Open the public demo](https://redline-research-copilot.onrender.com/).
+On September 23, 2026, the Render Free service passed its health check and
+browser verification with application commit `f469bb8`. Quote latency completed
+12 tasks and reproduced the documented −3,186.67 tick × quantity difference.
+The Python/C++ example also completed all 12 tasks; its shared-host timing
+comparison was inconclusive. These checks establish functionality, not capacity
+or representative benchmark performance.
+
 The repository includes a Render Blueprint (`render.yaml`) and a Docker image
 for the real Python service and built React frontend. The image compiles the
 existing C++17 extension, so the small Python/C++ benchmark is available too.

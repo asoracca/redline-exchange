@@ -9,6 +9,11 @@ TypeScript/React interface, and SQLite persistence.
 executes real simulations. Optional live AI selects plans and reviews relevance.
 No live prices, exchange connectivity or brokerage orders.
 
+**[Open the free public demo](https://redline-research-copilot.onrender.com/)** —
+select an example and run it. Scripted planning, real simulations, shared temporary
+history. The free host sleeps when idle; the first visit may take a minute.
+[Hosting details](docs/DEPLOYMENT.md).
+
 ![Research Copilot running a real offline study](docs/assets/research-copilot.png)
 
 ## Run locally
