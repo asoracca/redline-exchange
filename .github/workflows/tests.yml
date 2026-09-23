@@ -94,7 +94,7 @@ jobs:
         run: docker run --detach --name redline-public -p 127.0.0.1:8010:10000 -e REDLINE_PUBLIC_DEMO=1 -e REDLINE_PUBLIC_HOST=127.0.0.1 -e REDLINE_RESEARCH_DIR=/tmp/redline-public redline-public
       - name: Verify health and public restrictions
         run: |
-          curl --fail --retry 30 --retry-connrefused --retry-delay 2 http://127.0.0.1:8010/healthz
+          curl --fail --retry 30 --retry-all-errors --retry-delay 2 --max-time 5 --retry-max-time 60 http://127.0.0.1:8010/healthz
           python - <<'PY'
           import json, time, urllib.request, urllib.error
           root='http://127.0.0.1:8010'
