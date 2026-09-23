@@ -103,11 +103,18 @@ class Manager:
         self.pool.shutdown(wait=True, cancel_futures=False)
         self.store.close()
 
-    def start(self, request, background=True):
+    def start(self, request, background=True, public=False):
         with self.lock:
             if sum(not f.done() for f in self.futures.values()) >= 4:
                 raise ValueError("Local queue is full (four runs)")
+            if public:
+                for rid in self.store.prune_public(
+                    protected={rid for rid, f in self.futures.items() if not f.done()}
+                ):
+                    self.futures.pop(rid, None)
             run = self.store.create(request.model_dump(), self.source)
+            if public:
+                self.store.update(run["id"], audience="public_demo")
             self.store.event(run["id"], "state", "draft")
             if background:
                 self.futures[run["id"]] = self.pool.submit(self.work, run["id"])

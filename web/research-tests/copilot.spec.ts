@@ -82,3 +82,30 @@ test("real offline study, evidence, history, narrow screen and failure state", a
   ).toBeVisible();
   expect(errors).toEqual([]);
 });
+
+test("public demo labels shared history and prevents private or paid runs", async ({
+  page,
+}) => {
+  await page.goto("http://127.0.0.1:8004/");
+  await expect(page.locator(".public-notice")).toContainText(
+    "All runs are shared",
+  );
+  await expect(page.locator("#question")).toHaveAttribute("readonly", "");
+  await expect(
+    page.getByRole("combobox", { name: "Planning mode" }),
+  ).toBeDisabled();
+  await page.getByRole("button", { name: "Run experiment" }).click();
+  await expect(
+    page.getByRole("heading", { name: "Evidence, ready to inspect" }),
+  ).toBeVisible();
+  await expect(page.locator(".report")).toContainText("-3186.67");
+  await expect(page.getByRole("button", { name: "Cancel run" })).toHaveCount(0);
+  await expect(
+    page.getByRole("link", { name: "Source & local app" }),
+  ).toHaveAttribute("href", "https://github.com/asoracca/redline-exchange");
+  const result = await page.request.post(
+    "http://127.0.0.1:8004/api/research/runs",
+    { data: { question: "Do something with my private data" } },
+  );
+  expect(result.status()).toBe(400);
+});

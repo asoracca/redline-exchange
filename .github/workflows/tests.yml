@@ -84,3 +84,42 @@ jobs:
             docs/assets/exchange-lab.png
             docs/assets/research-copilot.png
             /tmp/research-evaluation/
+
+  public-demo-image:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: docker build -t redline-public .
+      - name: Start isolated public demo
+        run: docker run --detach --name redline-public -p 127.0.0.1:8010:10000 -e REDLINE_PUBLIC_DEMO=1 -e REDLINE_PUBLIC_HOST=127.0.0.1 -e REDLINE_RESEARCH_DIR=/tmp/redline-public redline-public
+      - name: Verify health and public restrictions
+        run: |
+          curl --fail --retry 30 --retry-connrefused --retry-delay 2 http://127.0.0.1:8010/healthz
+          python - <<'PY'
+          import json, time, urllib.request, urllib.error
+          root='http://127.0.0.1:8010'
+          def get(path):
+              return json.load(urllib.request.urlopen(root+path))
+          def post(value):
+              request=urllib.request.Request(root+'/api/research/runs',data=json.dumps(value).encode(),headers={'Content-Type':'application/json'})
+              return json.load(urllib.request.urlopen(request))
+          caps=get('/api/research/capabilities')
+          assert caps['public_demo'] and not caps['live_configured']
+          for question in (caps['examples'][0],caps['examples'][5]):
+              run=post({'question':question})
+              for _ in range(100):
+                  run=get('/api/research/runs/'+run['id'])
+                  if run['state'] in ('completed','failed'):break
+                  time.sleep(.2)
+              assert run['state']=='completed',run
+              assert run['model_calls']==0
+          try:post({'question':caps['examples'][0],'mode':'live'})
+          except urllib.error.HTTPError as e:assert e.code==403
+          else:raise AssertionError('Live mode must be disabled')
+          PY
+      - name: Container logs
+        if: always()
+        run: docker logs redline-public || true
+      - name: Stop container
+        if: always()
+        run: docker rm --force redline-public || true

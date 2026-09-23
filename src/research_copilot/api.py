@@ -1,4 +1,4 @@
-"""Local-only research API and existing exchange demo on the same origin."""
+"""Research API with explicit local and restricted public-demo modes."""
 
 import os
 from contextlib import asynccontextmanager
@@ -12,23 +12,43 @@ from .models import StartRequest
 from .planner import describe
 from .workflow import Manager
 from .tools import SCHEMAS
+from .public_demo import PublicDemo
 
 
 def create_app(root=None):
+    public = os.getenv("REDLINE_PUBLIC_DEMO") == "1"
+    policy = PublicDemo() if public else None
+    host = os.getenv("RENDER_EXTERNAL_HOSTNAME") or os.getenv("REDLINE_PUBLIC_HOST")
+    if public and (not host or any(c in host for c in "/*: ")):
+        raise ValueError("Public demo needs one explicit public hostname")
+
     @asynccontextmanager
     async def lifespan(app):
         app.state.manager = Manager(
-            root or os.getenv("REDLINE_RESEARCH_DIR", ".research-data")
+            root
+            or os.getenv(
+                "REDLINE_RESEARCH_DIR",
+                ".research-public" if public else ".research-data",
+            )
         )
-        yield
-        app.state.manager.close()
+        try:
+            if public and any(
+                r.get("audience") != "public_demo"
+                for r in app.state.manager.store.list()
+            ):
+                raise ValueError("Refusing to publish a local/private research store")
+            yield
+        finally:
+            app.state.manager.close()
 
     app = FastAPI(
         title="Redline Research Copilot — local synthetic research", lifespan=lifespan
     )
     app.add_middleware(LocalBoundary)
     app.add_middleware(
-        TrustedHostMiddleware, allowed_hosts=["127.0.0.1", "localhost", "testserver"]
+        TrustedHostMiddleware,
+        allowed_hosts=["127.0.0.1", "localhost", "testserver"]
+        + ([host] if public else []),
     )
 
     @app.exception_handler(KeyError)
@@ -37,13 +57,17 @@ def create_app(root=None):
 
         return JSONResponse({"detail": "Unknown run or artifact"}, status_code=404)
 
+    @app.get("/healthz")
+    def health():
+        return {"status": "ok", "mode": "public_demo" if public else "local"}
+
     @app.get("/api/research/capabilities")
     def capabilities():
         return dict(
             **describe(),
-            live_configured=bool(
-                os.getenv("OPENAI_API_KEY") and os.getenv("OPENAI_MODEL")
-            ),
+            public_demo=public,
+            live_configured=not public
+            and bool(os.getenv("OPENAI_API_KEY") and os.getenv("OPENAI_MODEL")),
             live_verification="not run",
             tool_schemas={k: v.model_json_schema() for k, v in SCHEMAS.items()},
         )
@@ -64,7 +88,9 @@ def create_app(root=None):
     @app.post("/api/research/runs", status_code=202)
     def start(request: StartRequest):
         try:
-            return app.state.manager.start(request)
+            if policy:
+                request = policy.prepare(request)
+            return app.state.manager.start(request, public=public)
         except ValueError as exc:
             raise HTTPException(429, str(exc)) from exc
 
@@ -79,10 +105,18 @@ def create_app(root=None):
 
     @app.post("/api/research/runs/{rid}/cancel")
     def cancel(rid: str):
+        if public:
+            raise HTTPException(
+                403, "Shared public runs cannot be canceled by visitors"
+            )
         return app.state.manager.cancel(rid)
 
     @app.post("/api/research/runs/{rid}/resume", status_code=202)
     def resume(rid: str):
+        if public:
+            raise HTTPException(
+                403, "Use a new example run; resume is available in the local app"
+            )
         try:
             return app.state.manager.resume(rid)
         except ValueError as exc:

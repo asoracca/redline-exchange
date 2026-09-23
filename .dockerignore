@@ -1,0 +1,14 @@
+.git
+.venv
+**/__pycache__
+**/*.so
+**/*.dylib
+**/*.sqlite3*
+.env
+.research-data
+.research-public
+live-evaluation
+web/node_modules
+web/dist
+web/test-results
+docs

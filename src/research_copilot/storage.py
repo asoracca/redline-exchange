@@ -196,6 +196,32 @@ class Store:
                 self.db.execute("ROLLBACK")
                 raise
 
+    def prune_public(self, keep=49, protected=()):
+        """Evict only explicitly public terminal runs; local research is never pruned."""
+        with self.lock:
+            rows = self.list()
+            if any(r.get("audience") != "public_demo" for r in rows):
+                raise ValueError("Public demo requires a separate public-only store")
+            candidates = [
+                r
+                for r in reversed(rows)
+                if r["id"] not in protected
+                and r["state"] in {"completed", "failed", "canceled", "interrupted"}
+            ]
+            remove = candidates[: max(0, len(rows) - keep)]
+            self.db.execute("BEGIN IMMEDIATE")
+            try:
+                for run in remove:
+                    rid = run["id"]
+                    for table in ("events", "tasks", "artifacts"):
+                        self.db.execute(f"DELETE FROM {table} WHERE run_id=?", (rid,))
+                    self.db.execute("DELETE FROM runs WHERE id=?", (rid,))
+                self.db.execute("COMMIT")
+            except BaseException:
+                self.db.execute("ROLLBACK")
+                raise
+            return [r["id"] for r in remove]
+
     def artifact(self, rid, name, content):
         if name not in ARTIFACTS:
             raise ValueError("Artifact destination not authorized")

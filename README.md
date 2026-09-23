@@ -135,6 +135,14 @@ Python-facing C++/Python throughput ratios **1.25×–2.77×** on this host.
 HTTP/SQLite/UI; [workflow and browser latency](docs/RESEARCH_COPILOT.md#validation-record)
 are recorded separately. No matching or existing benchmark implementation changed.
 
+## Free public hosting
+
+[Render deployment configuration and public-mode limits](docs/DEPLOYMENT.md)
+provide a free, example-only public demo with temporary shared history. The
+local app retains private questions, optional live AI, and persistent local
+history. A Render login is required to publish; configuration alone is not a
+verified deployment.
+
 ## Limits
 
 Single local process, one worker, four queued/running requests, 100 saved runs.

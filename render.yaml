@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: redline-research-copilot
+    runtime: docker
+    plan: free
+    repo: https://github.com/asoracca/redline-exchange
+    branch: codex/research-copilot
+    dockerfilePath: ./Dockerfile
+    healthCheckPath: /healthz
+    autoDeployTrigger: "off"
+    envVars:
+      - key: REDLINE_PUBLIC_DEMO
+        value: "1"
+      - key: REDLINE_RESEARCH_DIR
+        value: /tmp/redline-public

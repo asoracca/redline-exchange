@@ -86,17 +86,23 @@ function App() {
     [mode, setMode] = useState("offline"),
     [workflow, setWorkflow] = useState("staged"),
     [live, setLive] = useState(false),
+    [publicDemo, setPublicDemo] = useState(false),
     [comparison, setComparison] = useState<Comparison | null>(null),
     [report, setReport] = useState(""),
     [tab, setTab] = useState("Findings"),
     [budget, setBudget] = useState(40000);
   const refreshHistory = () => request<Summary[]>("/runs").then(setHistory);
   useEffect(() => {
-    request<{ examples: string[]; live_configured: boolean }>("/capabilities")
+    request<{
+      examples: string[];
+      live_configured: boolean;
+      public_demo: boolean;
+    }>("/capabilities")
       .then((c) => {
         setExamples(c.examples);
         setQuestion(c.examples[0]);
         setLive(c.live_configured);
+        setPublicDemo(c.public_demo);
       })
       .catch((e) => setError(e.message));
     refreshHistory().catch((e) => setError(e.message));
@@ -201,11 +207,16 @@ function App() {
         </button>
         <a
           className="nav"
-          href="http://127.0.0.1:8000/"
+          href={
+            publicDemo
+              ? "https://github.com/asoracca/redline-exchange"
+              : "http://127.0.0.1:8000/"
+          }
           target="_blank"
           rel="noreferrer"
         >
-          <span>⇄</span> Exchange demo ↗
+          <span>⇄</span>{" "}
+          {publicDemo ? "Source & local app ↗" : "Exchange demo ↗"}
         </a>
         <div className="rail-label history-label">
           RUN HISTORY <span>{history.length}</span>
@@ -235,8 +246,13 @@ function App() {
           )}
         </div>
         <div className="local">
-          <span className="dot completed" /> LOCAL WORKSPACE
-          <small>SQLite checkpoints · single worker</small>
+          <span className="dot completed" />{" "}
+          {publicDemo ? "PUBLIC DEMO" : "LOCAL WORKSPACE"}
+          <small>
+            {publicDemo
+              ? "Shared temporary example history"
+              : "SQLite checkpoints · single worker"}
+          </small>
         </div>
       </aside>
       <main>
@@ -259,6 +275,14 @@ function App() {
             Real simulations. Traceable results. No real-market claims.
           </p>
         </section>
+        {publicDemo && (
+          <div className="finding-note public-notice">
+            Public demo · example questions only · real simulations with
+            scripted planning. All runs are shared. Only the latest 50 runs are
+            retained, and history may reset when the free host restarts. Live AI
+            is disabled. Do not enter private information.
+          </div>
+        )}
         <section className="composer">
           <div className="section-title">
             <h2>What would you like to investigate?</h2>
@@ -271,6 +295,7 @@ function App() {
           </label>
           <textarea
             id="question"
+            readOnly={publicDemo}
             value={question}
             onChange={(e) => setQuestion(e.target.value)}
             maxLength={1500}
@@ -298,11 +323,12 @@ function App() {
                 Planning{" "}
                 <select
                   aria-label="Planning mode"
+                  disabled={publicDemo}
                   value={mode}
                   onChange={(e) => setMode(e.target.value)}
                 >
                   <option value="offline">Offline · scripted</option>
-                  <option value="live">
+                  <option value="live" disabled={publicDemo}>
                     Live AI {live ? "" : "· needs configuration"}
                   </option>
                 </select>
@@ -341,11 +367,9 @@ function App() {
               />
             </label>
             <p>
-              120 seconds active time · 100 tool calls · 4 model calls · 6,000
-              reserved output tokens. Offline plans are prewritten; simulations
-              and reports run for real. Live AI uses your configured model and
-              may incur provider charges. Cost unavailable. No orders reach a
-              broker.
+              {publicDemo
+                ? "Public runs: 30 seconds, 40 tool calls and 9,000 work units maximum. Six requests per minute across all visitors. Offline planning is scripted; simulations and reports run for real. Live AI is disabled."
+                : "120 seconds active time · 100 tool calls · 4 model calls · 6,000 reserved output tokens. Offline plans are prewritten; simulations and reports run for real. Live AI uses your configured model and may incur provider charges. Cost unavailable. No orders reach a broker."}
             </p>
           </details>
         </section>
@@ -384,9 +408,9 @@ function App() {
                 {run.completed_tasks}/{total || "—"} tasks · {fmt(run.elapsed)}s
                 active
               </span>
-              {active ? (
+              {active && !publicDemo ? (
                 <button onClick={() => action("cancel")}>Cancel run</button>
-              ) : run.state !== "completed" ? (
+              ) : run.state !== "completed" && !publicDemo ? (
                 <button onClick={() => action("resume")}>
                   Resume checkpoints
                 </button>
