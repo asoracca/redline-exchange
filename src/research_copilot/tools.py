@@ -61,7 +61,7 @@ class Registry:
         if name == "describe_simulator":
             return describe()
         if name == "validate_experiment":
-            if run["plan"] is not None or run["state"] != "draft":
+            if run["plan"] is not None or run["state"] not in {"draft", "planning"}:
                 raise ValueError("Validated plans are immutable")
             if args.estimated_work > run["request"]["limits"]["max_work"]:
                 raise ValueError("Plan exceeds computational budget; no tasks started")

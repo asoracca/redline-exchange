@@ -27,3 +27,5 @@ web/playwright-report/
 .env
 live-evaluation/
 .research-public/
+
+web/research-test-results/

@@ -105,6 +105,12 @@ class PlanningDecision(StrictModel):
     explanation: str = Field(max_length=600)
     plan: ExperimentPlan | None
 
+    @model_validator(mode="after")
+    def consistent(self):
+        if (self.outcome == "planned") != (self.plan is not None):
+            raise ValueError("Only a planned decision must include a plan")
+        return self
+
 
 class ReviewDecision(StrictModel):
     assessment: Literal["relevant", "inconclusive", "question_mismatch"]

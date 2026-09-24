@@ -787,3 +787,29 @@ footer span {
     -webkit-line-clamp: 2;
   }
 }
+
+.stage-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding: 0;
+  margin: 20px 0;
+  list-style: none;
+  font-size: 13px;
+}
+.stage-list li {
+  border: 1px solid #344352;
+  border-radius: 6px;
+  padding: 8px 12px;
+}
+.stage-list .done {
+  color: #6de3ba;
+}
+.stage-list .pending {
+  color: #a9b9c7;
+}
+.budget-status {
+  padding: 14px 0;
+  color: #a9b9c7;
+  font-size: 13px;
+}

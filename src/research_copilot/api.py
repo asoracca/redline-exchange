@@ -9,6 +9,7 @@ from fastapi.staticfiles import StaticFiles
 from starlette.middleware.trustedhost import TrustedHostMiddleware
 from exchange.boundary import LocalBoundary
 from .models import StartRequest
+from .contracts import Capabilities, RunSummary, RunView
 from .planner import describe
 from .workflow import Manager
 from .tools import SCHEMAS
@@ -61,7 +62,7 @@ def create_app(root=None):
     def health():
         return {"status": "ok", "mode": "public_demo" if public else "local"}
 
-    @app.get("/api/research/capabilities")
+    @app.get("/api/research/capabilities", response_model=Capabilities)
     def capabilities():
         return dict(
             **describe(),
@@ -72,7 +73,7 @@ def create_app(root=None):
             tool_schemas={k: v.model_json_schema() for k, v in SCHEMAS.items()},
         )
 
-    @app.get("/api/research/runs")
+    @app.get("/api/research/runs", response_model=list[RunSummary])
     def history():
         return [
             dict(
@@ -85,40 +86,67 @@ def create_app(root=None):
             for r in app.state.manager.store.list()
         ]
 
-    @app.post("/api/research/runs", status_code=202)
+    @app.post("/api/research/runs", status_code=202, response_model=RunView)
     def start(request: StartRequest):
         try:
             if policy:
                 request = policy.prepare(request)
-            return app.state.manager.start(request, public=public)
+            return view(app.state.manager.start(request, public=public))
         except ValueError as exc:
             raise HTTPException(429, str(exc)) from exc
 
-    @app.get("/api/research/runs/{rid}")
+    def view(run):
+        exhausted = run.get("failure_code") in {
+            "budget",
+            "question_rejected",
+            "question_mismatch",
+        }
+        changed = run["source"] != app.state.manager.source
+        resumable = (
+            not public
+            and not exhausted
+            and not changed
+            and run["state"] in {"failed", "canceled", "interrupted"}
+            and run.get("resume_count", 0) < 3
+        )
+        guidance = (
+            "Revise the question or increase the budget, then start a new experiment."
+            if exhausted
+            else "Source or runtime changed; start a new experiment."
+            if changed
+            else "Resume skips completed tasks and keeps the original budgets."
+            if resumable
+            else "Start a new experiment; checkpoint resume is unavailable."
+        )
+        return dict(**run, can_resume=resumable, next_action=guidance)
+
+    @app.get("/api/research/runs/{rid}", response_model=RunView)
     def get(rid: str):
         store = app.state.manager.store
         return dict(
-            **store.get(rid),
+            **view(store.get(rid)),
             events=store.events(rid),
             artifacts=store.artifact_names(rid),
         )
 
-    @app.post("/api/research/runs/{rid}/cancel")
+    @app.post("/api/research/runs/{rid}/cancel", response_model=RunView)
     def cancel(rid: str):
         if public:
             raise HTTPException(
                 403, "Shared public runs cannot be canceled by visitors"
             )
-        return app.state.manager.cancel(rid)
+        return view(app.state.manager.cancel(rid))
 
-    @app.post("/api/research/runs/{rid}/resume", status_code=202)
+    @app.post(
+        "/api/research/runs/{rid}/resume", status_code=202, response_model=RunView
+    )
     def resume(rid: str):
         if public:
             raise HTTPException(
                 403, "Use a new example run; resume is available in the local app"
             )
         try:
-            return app.state.manager.resume(rid)
+            return view(app.state.manager.resume(rid))
         except ValueError as exc:
             raise HTTPException(409, str(exc)) from exc
 

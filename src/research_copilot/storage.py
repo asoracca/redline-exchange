@@ -104,12 +104,14 @@ class Store:
                 input_tokens=None,
                 output_tokens=None,
                 cost_usd=None,
+                usage_complete=True,
                 work=0,
                 cancel_requested=False,
                 completed_tasks=0,
                 revision=0,
                 review=None,
                 error=None,
+                failure_code=None,
             )
             self.db.execute(
                 "INSERT INTO runs VALUES (?,?)", (run["id"], canonical(run))
@@ -129,6 +131,34 @@ class Store:
             run.update(sanitize(changes))
             self.db.execute("UPDATE runs SET data=? WHERE id=?", (canonical(run), rid))
             return run
+
+    def transition(self, rid, state):
+        """A state change and its ordered event commit together."""
+        with self.lock:
+            self.db.execute("BEGIN IMMEDIATE")
+            try:
+                self.update(rid, state=state)
+                self.event(rid, "state", state)
+                self.db.execute("COMMIT")
+            except BaseException:
+                self.db.execute("ROLLBACK")
+                raise
+
+    def prepare_resume(self, rid, **changes):
+        """Retain tasks, but never expose a previous attempt's certification."""
+        with self.lock:
+            self.db.execute("BEGIN IMMEDIATE")
+            try:
+                self.update(rid, **changes)
+                self.db.execute(
+                    "DELETE FROM artifacts WHERE run_id=? AND name IN ('report.md','review.json','evidence.json','logs.json')",
+                    (rid,),
+                )
+                self.update(rid, review=None)
+                self.db.execute("COMMIT")
+            except BaseException:
+                self.db.execute("ROLLBACK")
+                raise
 
     def list(self):
         with self.lock:

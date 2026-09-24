@@ -2,52 +2,10 @@ import React, { useEffect, useState } from "react";
 import { createRoot } from "react-dom/client";
 import "./research.css";
 
-type Summary = {
-  id: string;
-  question: string;
-  state: string;
-  created: number;
-  mode: string;
-};
-type Event = {
-  seq: number;
-  kind: string;
-  summary: string;
-  ok?: boolean;
-  duration_ms?: number;
-  args?: unknown;
-  error?: string;
-  usage?: unknown;
-};
-type Plan = {
-  kind: string;
-  hypothesis: string;
-  steps: number;
-  seeds: number[];
-  estimated_work: number;
-  baseline: Record<string, number>;
-  treatments: { name: string; parameters: Record<string, number> }[];
-  assumptions: string[];
-};
-type Run = {
-  id: string;
-  state: string;
-  plan: Plan | null;
-  request: { question: string; mode: string; workflow: string };
-  error: string | null;
-  explanation: string;
-  completed_tasks: number;
-  elapsed: number;
-  work: number;
-  tools: number;
-  model_calls: number;
-  input_tokens: number | null;
-  output_tokens: number | null;
-  cost_usd: number | null;
-  events: Event[];
-  artifacts: string[];
-  review: { assessment: string; concerns: string[] } | null;
-};
+import type { components } from "./research-contracts";
+type Summary = components["schemas"]["RunSummary"];
+type Run = components["schemas"]["RunView"];
+type Capabilities = components["schemas"]["Capabilities"];
 type Stats = { mean: number; sd: number; n: number; low: number; high: number };
 type Comparison = {
   groups: Record<string, Record<string, Stats>>;
@@ -61,17 +19,28 @@ async function request<T>(
   body?: unknown,
 ): Promise<T> {
   const r = await fetch(BASE + path, {
+    signal: AbortSignal.timeout(15000),
     method,
     headers: { "Content-Type": "application/json" },
     body: body === undefined ? undefined : JSON.stringify(body),
   });
   if (!r.ok) {
-    const e = await r.json();
+    const e = await r.json().catch(() => ({
+      detail: `Server returned HTTP ${r.status}. Try again when the service is available.`,
+    }));
     throw Error(
       typeof e.detail === "string" ? e.detail : "Request validation failed",
     );
   }
   return r.json();
+}
+async function fetchArtifact(url: string): Promise<Response> {
+  const response = await fetch(url, { signal: AbortSignal.timeout(15000) });
+  if (!response.ok)
+    throw Error(
+      `Artifact unavailable (HTTP ${response.status}). Reload this run to retry.`,
+    );
+  return response;
 }
 const fmt = (n: number) =>
   n.toLocaleString(undefined, { maximumFractionDigits: 2 });
@@ -90,14 +59,11 @@ function App() {
     [comparison, setComparison] = useState<Comparison | null>(null),
     [report, setReport] = useState(""),
     [tab, setTab] = useState("Findings"),
-    [budget, setBudget] = useState(40000);
+    [budget, setBudget] = useState(40000),
+    [pollRevision, setPollRevision] = useState(0);
   const refreshHistory = () => request<Summary[]>("/runs").then(setHistory);
   useEffect(() => {
-    request<{
-      examples: string[];
-      live_configured: boolean;
-      public_demo: boolean;
-    }>("/capabilities")
+    request<Capabilities>("/capabilities")
       .then((c) => {
         setExamples(c.examples);
         setQuestion(c.examples[0]);
@@ -113,27 +79,38 @@ function App() {
     setReport("");
     if (!selected) return;
     let active = true;
+    let timer: ReturnType<typeof setTimeout>;
     const update = () =>
       request<Run>("/runs/" + selected)
         .then((r) => {
-          if (active) setRun(r);
+          if (active) {
+            setRun(r);
+            if (
+              !["completed", "failed", "canceled", "interrupted"].includes(
+                r.state,
+              )
+            )
+              timer = setTimeout(update, 700);
+          }
         })
         .catch((e) => {
-          if (active) setError(e.message);
+          if (active) {
+            setError(e.message);
+            timer = setTimeout(update, 2000);
+          }
         });
     update();
-    const timer = setInterval(update, 700);
     return () => {
       active = false;
-      clearInterval(timer);
+      clearTimeout(timer);
     };
-  }, [selected]);
+  }, [selected, pollRevision]);
   useEffect(() => {
     if (!run) return;
     refreshHistory().catch(() => {});
     if (run.state === "completed") {
       let active = true;
-      fetch(`${BASE}/runs/${run.id}/artifacts/comparison.json`)
+      fetchArtifact(`${BASE}/runs/${run.id}/artifacts/comparison.json`)
         .then((r) => r.json())
         .then((c) => {
           if (active) setComparison(c);
@@ -141,7 +118,7 @@ function App() {
         .catch((e) => {
           if (active) setError("Could not load evidence: " + String(e));
         });
-      fetch(`${BASE}/runs/${run.id}/artifacts/report.md`)
+      fetchArtifact(`${BASE}/runs/${run.id}/artifacts/report.md`)
         .then((r) => r.text())
         .then((s) => {
           if (active) setReport(s);
@@ -177,6 +154,7 @@ function App() {
     try {
       await request("/runs/" + run!.id + "/" + name, "POST", {});
       setRun(await request<Run>("/runs/" + run!.id));
+      setPollRevision((v) => v + 1);
     } catch (e) {
       setError(String(e));
     }
@@ -410,13 +388,45 @@ function App() {
               </span>
               {active && !publicDemo ? (
                 <button onClick={() => action("cancel")}>Cancel run</button>
-              ) : run.state !== "completed" && !publicDemo ? (
+              ) : run.can_resume && !publicDemo ? (
                 <button onClick={() => action("resume")}>
                   Resume checkpoints
                 </button>
               ) : null}
             </div>
-            <div className="progress">
+            <ol className="stage-list" aria-label="Research workflow">
+              {[
+                "Question",
+                "Plan",
+                "Validate",
+                "Simulate",
+                "Evidence",
+                "Review",
+              ].map((stage, index) => {
+                const done = [
+                  true,
+                  !!run.plan,
+                  !!run.plan,
+                  !!total && run.completed_tasks === total,
+                  (run.artifacts ?? []).includes("comparison.json"),
+                  !!run.review,
+                ][index];
+                return (
+                  <li key={stage} className={done ? "done" : "pending"}>
+                    {done ? "✓ " : "○ "}
+                    {stage}
+                  </li>
+                );
+              })}
+            </ol>
+            <div
+              className="progress"
+              role="progressbar"
+              aria-label="Simulation tasks"
+              aria-valuemin={0}
+              aria-valuemax={total || 1}
+              aria-valuenow={run.completed_tasks}
+            >
               <i
                 style={{
                   width: total
@@ -428,10 +438,7 @@ function App() {
             {run.error && (
               <div role="alert" className="error">
                 {run.error}
-                <p>
-                  Successful tasks are retained. Resume keeps the original
-                  budgets; exhausted runs require a new experiment.
-                </p>
+                <p>{run.next_action}</p>
               </div>
             )}
             <nav className="tabs">
@@ -466,7 +473,59 @@ function App() {
                         <strong>{fmt(run.plan.estimated_work)}</strong>
                       </div>
                     </div>
-                    <pre>{JSON.stringify(run.plan, null, 2)}</pre>
+                    <h4>Changes from baseline</h4>
+                    <div className="table-scroll">
+                      <table aria-label="Experiment controls">
+                        <thead>
+                          <tr>
+                            <th>Configuration</th>
+                            <th>Control</th>
+                            <th>Baseline</th>
+                            <th>Treatment</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {run.plan.treatments.flatMap((t) =>
+                            Object.entries(t.parameters)
+                              .filter(
+                                ([key, value]) =>
+                                  value !==
+                                  run.plan!.baseline?.[
+                                    key as keyof typeof t.parameters
+                                  ],
+                              )
+                              .map(([key, value]) => (
+                                <tr key={t.name + key}>
+                                  <td>{t.name}</td>
+                                  <td>{key.replaceAll("_", " ")}</td>
+                                  <td>
+                                    {String(
+                                      run.plan!.baseline?.[
+                                        key as keyof typeof t.parameters
+                                      ],
+                                    )}
+                                  </td>
+                                  <td>{String(value)}</td>
+                                </tr>
+                              )),
+                          )}
+                        </tbody>
+                      </table>
+                    </div>
+                    <p className="method">
+                      Seeds: {run.plan.seeds.join(", ")}. Simulation treatments
+                      use separate seed offsets; comparisons use exploratory,
+                      unadjusted intervals.
+                    </p>
+                    <ul>
+                      {run.plan.assumptions.map((a) => (
+                        <li key={a}>{a}</li>
+                      ))}
+                    </ul>
+                    <details>
+                      <summary>Validated plan JSON</summary>
+                      <pre>{JSON.stringify(run.plan, null, 2)}</pre>
+                    </details>
                   </>
                 ) : (
                   <p>{run.explanation || "Waiting for a validated plan."}</p>
@@ -583,6 +642,13 @@ function App() {
             )}
             {tab === "Activity & usage" && (
               <div className="panel">
+                <div className="budget-status" aria-label="Budget usage">
+                  Work {fmt(run.work)} /{" "}
+                  {fmt(run.request.limits?.max_work ?? 40000)} · Tools{" "}
+                  {run.tools} / {run.request.limits?.max_tools ?? 100} · Model
+                  calls {run.model_calls} /{" "}
+                  {run.request.limits?.max_model_calls ?? 4}
+                </div>
                 <div className="metrics">
                   <div>
                     <small>TOOLS / MODEL CALLS</small>
@@ -602,10 +668,14 @@ function App() {
                   </div>
                 </div>
                 <p className="method">
-                  Usage appears only when supplied by the provider. These are
-                  action summaries, not hidden reasoning.
+                  {run.request.mode === "offline"
+                    ? "No model was called. Planning and review are scripted."
+                    : run.usage_complete
+                      ? "Provider-reported usage is available for every response."
+                      : "Usage is incomplete: some attempts returned no token counts. Totals shown are only the reported portion."}{" "}
+                  These are action summaries, not hidden reasoning.
                 </p>
-                {run.events.map((e) => (
+                {(run.events ?? []).map((e) => (
                   <details className="event" key={e.seq}>
                     <summary>
                       <span
@@ -615,9 +685,7 @@ function App() {
                       />
                       <b>{e.kind}</b> {e.summary}
                       <small>
-                        {e.duration_ms !== undefined
-                          ? `${e.duration_ms} ms`
-                          : ""}
+                        {e.duration_ms != null ? `${e.duration_ms} ms` : ""}
                       </small>
                     </summary>
                     <pre>{JSON.stringify(e, null, 2)}</pre>
@@ -627,7 +695,7 @@ function App() {
             )}
             {tab === "Artifacts" && (
               <div className="panel artifact-grid">
-                {run.artifacts.map((n) => (
+                {(run.artifacts ?? []).map((n) => (
                   <a
                     key={n}
                     href={artifact(n)}
@@ -638,7 +706,7 @@ function App() {
                     {n}
                   </a>
                 ))}
-                {run.artifacts.length === 0 && (
+                {(run.artifacts ?? []).length === 0 && (
                   <p>Artifacts appear as validated stages finish.</p>
                 )}
               </div>

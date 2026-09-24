@@ -1,0 +1,5 @@
+{
+  "dataset_sha256": "f69a306ba4f9daf139ca7e00962a46cf5d6b9eecf4192969ee16ec8d177006e0",
+  "frozen_before_first_held_out_run_utc": "2026-09-24T02:54:54.801804+00:00",
+  "notes": "Self-authored local holdout, visible during implementation. Excluded from planner examples; not an independently blinded or unseen model-training benchmark."
+}

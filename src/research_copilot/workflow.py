@@ -22,6 +22,14 @@ class BudgetExceeded(RuntimeError):
     pass
 
 
+class QuestionRejected(ValueError):
+    pass
+
+
+class QuestionMismatch(ValueError):
+    pass
+
+
 class Context:
     def __init__(self, store, rid):
         self.store, self.rid = store, rid
@@ -49,6 +57,7 @@ class Context:
 
     def reserve_model(self):
         self.reserve("model_calls", 1, "max_model_calls")
+        self.store.update(self.rid, usage_complete=False)
         run = self.check()
         tokens = min(
             2500, run["request"]["limits"]["max_output_tokens"] - run["output_reserved"]
@@ -64,9 +73,17 @@ class Context:
         run = self.store.get(self.rid)
         safe_usage = {
             k: v
-            for k, v in (usage or {}).items()
+            for k, v in (usage if isinstance(usage, dict) else {}).items()
             if k in ("input_tokens", "output_tokens") and type(v) is int and v >= 0
         }
+        records = run.get("usage_records", 0) + int(
+            set(safe_usage) == {"input_tokens", "output_tokens"}
+        )
+        self.store.update(
+            self.rid,
+            usage_records=records,
+            usage_complete=records == run["model_calls"],
+        )
         for field, value in safe_usage.items():
             self.store.update(self.rid, **{field: (run[field] or 0) + value})
         self.store.event(
@@ -93,6 +110,7 @@ class Manager:
                     run["id"],
                     state="interrupted",
                     error="Process stopped; resume retained checkpoints",
+                    failure_code="interrupted",
                 )
                 self.store.event(run["id"], "state", "interrupted")
 
@@ -131,15 +149,24 @@ class Manager:
                 raise ValueError("Run still stopping")
             if run.get("resume_count", 0) >= 3:
                 raise ValueError("Three-resume limit reached; start a new run")
+            if run.get("failure_code") in {
+                "question_rejected",
+                "question_mismatch",
+                "budget",
+            }:
+                raise ValueError(
+                    "Revise the question or budget and start a new experiment"
+                )
             if run["source"] != self.source:
                 raise ValueError("Source or runtime changed; start a new run")
             if sum(not f.done() for f in self.futures.values()) >= 4:
                 raise ValueError("Local queue full")
-            self.store.update(
+            self.store.prepare_resume(
                 rid,
                 state="draft",
                 cancel_requested=False,
                 error=None,
+                failure_code=None,
                 resume_count=run.get("resume_count", 0) + 1,
             )
             self.futures[rid] = self.pool.submit(self.work, rid)
@@ -152,8 +179,7 @@ class Manager:
         return self.store.get(rid)
 
     def state(self, rid, state):
-        self.store.update(rid, state=state)
-        self.store.event(rid, "state", state)
+        self.store.transition(rid, state)
 
     def work(self, rid):
         ctx = Context(self.store, rid)
@@ -170,6 +196,7 @@ class Manager:
                     "Resuming validated plan; completed tasks are skipped",
                 )
             else:
+                self.state(rid, "planning")
                 capabilities = tools.call("describe_simulator", {})
                 if run["request"]["mode"] == "offline":
                     decision = offline_plan(run["request"]["question"])
@@ -197,7 +224,7 @@ class Manager:
                     decision_outcome=decision.outcome,
                 )
                 if decision.outcome != "planned" or decision.plan is None:
-                    raise ValueError(decision.explanation)
+                    raise QuestionRejected(decision.explanation)
                 plan = tools.call("validate_experiment", decision.plan.model_dump())
             self.state(rid, "validated")
             self.state(rid, "running")
@@ -255,6 +282,13 @@ class Manager:
                     review.assessment = response.assessment
             self.store.update(rid, review=review.model_dump())
             self.store.artifact(rid, "review.json", review.model_dump_json())
+            if (
+                review.assessment == "question_mismatch"
+                or "question_mismatch" in review.concerns
+            ):
+                raise QuestionMismatch(
+                    "Reviewer found the experiment does not answer the question. Inspect the plan and review, then revise the question. No report was certified."
+                )
             tools.call("generate_chart", {})
             tools.call(
                 "save_research_report",
@@ -317,7 +351,7 @@ class Manager:
             )
             self.state(rid, "completed")
         except StopRun as exc:
-            self.store.update(rid, error=str(exc))
+            self.store.update(rid, error=str(exc), failure_code="canceled")
             self.state(rid, "canceled")
         except Exception as exc:
             # Uncontrolled exception bodies may contain provider inputs or secrets.
@@ -327,7 +361,20 @@ class Manager:
                 and len(str(exc)) < 700
                 else f"{type(exc).__name__}: task failed; inspect action log and retry from checkpoints"
             )
-            self.store.update(rid, error=message)
+            code = (
+                "question_rejected"
+                if isinstance(exc, QuestionRejected)
+                else "question_mismatch"
+                if isinstance(exc, QuestionMismatch)
+                else "budget"
+                if isinstance(exc, BudgetExceeded) or "budget" in message.lower()
+                else "provider"
+                if isinstance(exc, ProviderError)
+                else "validation"
+                if isinstance(exc, ValueError)
+                else "execution"
+            )
+            self.store.update(rid, error=message, failure_code=code)
             self.store.event(rid, "failure", message, error_type=type(exc).__name__)
             self.state(rid, "failed")
         finally:
