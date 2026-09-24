@@ -259,22 +259,6 @@
           }
         }
       }
-    },
-    "/": {
-      "get": {
-        "summary": "Home",
-        "operationId": "home__get",
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {}
-              }
-            }
-          }
-        }
-      }
     }
   },
   "components": {

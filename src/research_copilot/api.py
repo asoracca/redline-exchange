@@ -172,7 +172,7 @@ def create_app(root=None):
     dist = Path(__file__).resolve().parents[2] / "web/dist"
     if dist.exists():
 
-        @app.get("/")
+        @app.get("/", include_in_schema=False)
         def home():
             return FileResponse(dist / "research.html")
 
