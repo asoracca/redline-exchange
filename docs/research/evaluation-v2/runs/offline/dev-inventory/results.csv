@@ -1,0 +1,13 @@
+scenario,seed,ending_pnl_ticks,execution_edge_pnl_ticks,inventory_revaluation_pnl_ticks,max_abs_inventory,max_drawdown_ticks
+baseline,17,4210,3470,740,50,1040
+baseline,42,3010,3720,-710,60,900
+baseline,73,1150,3210,-2060,70,1280
+baseline,101,3150,3470,-320,40,420
+baseline,137,2350,3830,-1480,60,670
+baseline,211,1660,3610,-1950,50,880
+tight_inventory,100017,1670,2310,-640,20,510
+tight_inventory,100042,3350,2290,1060,20,310
+tight_inventory,100073,2640,3110,-470,20,450
+tight_inventory,100101,2160,2850,-690,20,510
+tight_inventory,100137,3720,2520,1200,20,250
+tight_inventory,100211,2750,2110,640,20,350

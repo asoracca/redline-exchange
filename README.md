@@ -94,24 +94,35 @@ The adapter is tested with mocked transport. [Provider setup and sources](docs/R
 python -m pytest -q
 python -m ruff check .
 python -m ruff format --check .
-python -m research_copilot.evaluate --output docs/research/evaluation
+python -m research_copilot.evaluate_v2 --split development --output /tmp/redline-eval-v2
 python scripts/research_recovery.py
 pnpm --dir web exec playwright install chromium
 pnpm --dir web test
 pnpm --dir web run test:research
 ```
 
-Local validation: **136 Python tests passed**, including original regressions
-and native parity. Research and exchange browser flows passed. The versioned
-suite has five supported, three ambiguous, three unsupported, three injection
-and two insufficient-evidence cases. Both scripted workflows passed **16/16**;
-both completed **5/5** supported studies. No multi-agent advantage is established.
-[Measured comparison and raw rows](docs/research/evaluation/RESULTS.md).
+Local validation: **158 Python tests passed**, including original regressions,
+native parity, malformed provider outputs, cancellation, fabricated evidence and
+transaction rollback. The browser suite covers the real research/exchange flows
+and explicitly mocked gateway failures. Live-model behavior remains **unmeasured**.
 
-Recovery demonstration: fail task four after three successful checkpoints,
-resume, and finish with **12 unique tasks**. Failed work remains charged:
-**6,500** work units including the failed attempt.
-[Recorded output](docs/research/recovery.json).
+Evaluation v2 has 12 development and 12 held-out cases. The scripted planner passed
+**12/12** development expectations but **5/12** held-out expectations; it completed
+**0/5** supported held-out paraphrases. It is an exact-template demonstration, not
+a general natural-language planner. Live comparison is runnable with explicit
+credential/spending authorization. No multi-agent advantage is established.
+[Scorecard, raw cases and failure examples](docs/research/evaluation-v2/RESULTS.md) ·
+[Protocol, confidence intervals and limitations](docs/RELIABILITY.md).
+
+Recovery demonstration: fail task four after three checkpoints, resume, and finish
+**12 unique tasks** with **6,500** charged work units. Failed work stays charged.
+[Recorded recovery](docs/research/recovery-v2.json). Run state/event changes and
+checkpoint/cache writes are transactional; old report certification is cleared on resume.
+
+The UI exposes workflow stages, baseline/treatment changes, raw plans, uncertainty,
+action logs and recovery guidance using generated server contracts. A mismatched
+question/plan or fabricated evidence reference cannot produce a certified report.
+[Two-minute walkthrough](docs/RELIABILITY.md#reproducible-demonstration).
 
 ## Existing exchange and C++ core
 
@@ -131,14 +142,16 @@ python copilot.py
 Choose **Python vs C++**. This times existing core API calls after parity checks;
 it is a small local timing experiment, not an exchange capacity test. The market
 simulator itself still uses the Python reference book. Main's C++17 implementation
-is preserved; the separate draft implementation in PR #3 is not incorporated.
+is preserved; the separate implementation in closed PR #3 is not incorporated.
 [Native boundary](docs/NATIVE.md) · [Original benchmark methods](docs/BENCHMARKS.md).
 
-The original study was rerun with 100,000 events, five trials, seeds 17/42/73:
-Python-facing C++/Python throughput ratios **1.25×–2.77×** on this host.
-[Recorded core study](docs/research/core-study/STUDY.md). Core timings exclude
-HTTP/SQLite/UI; [workflow and browser latency](docs/RESEARCH_COPILOT.md#validation-record)
-are recorded separately. No matching or existing benchmark implementation changed.
+The unchanged study was rerun with 100,000 events, four workloads, five trials and
+seeds 17/42/73 (120 trials). Python-facing C++/Python median throughput ratios were
+**1.28×–2.52×** on this development laptop. All trials and environment details are
+retained; brief background test activity limits interpretation.
+[Raw core study](docs/research/core-study-v2/STUDY.md) ·
+[Separate HTTP, SQLite, workflow and browser measurements](docs/RELIABILITY.md#timing-boundaries).
+No matching implementation changed and no exchange-capacity claim is made.
 
 ## Free public hosting
 
@@ -146,7 +159,8 @@ are recorded separately. No matching or existing benchmark implementation change
 provide a free, example-only public demo with temporary shared history. The
 local app retains private questions, optional live AI, and persistent local
 history. A Render login is required to publish; configuration alone is not a
-verified deployment.
+verified deployment. The hosted site is the last published snapshot; local
+hardening changes require an explicit new deployment.
 
 ## Limits
 

@@ -1,0 +1,21 @@
+{
+  "before": {
+    "state": "failed",
+    "completed_tasks": 3,
+    "work": 2000,
+    "error": "RuntimeError: task failed; inspect action log and retry from checkpoints"
+  },
+  "retained_tasks": [
+    "0:0",
+    "0:1",
+    "0:2"
+  ],
+  "after": {
+    "state": "completed",
+    "completed_tasks": 12,
+    "work": 6500,
+    "error": null
+  },
+  "unique_tasks": 12,
+  "note": "The failed attempt remains charged: 6500 work units for a 6000-unit plan."
+}

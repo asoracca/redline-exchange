@@ -1,0 +1,1 @@
+{"assessment":"inconclusive","concerns":["synthetic_only","uncertain_difference","multiple_comparisons"],"evidence_ids":["wide_spread.ending_pnl_ticks","wide_spread.execution_edge_pnl_ticks","wide_spread.inventory_revaluation_pnl_ticks","wide_spread.max_abs_inventory","wide_spread.max_drawdown_ticks"]}

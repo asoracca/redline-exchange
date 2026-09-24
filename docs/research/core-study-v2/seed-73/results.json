@@ -1,0 +1,1175 @@
+{
+  "timestamp_utc": "2026-09-24T02:53:04.755501+00:00",
+  "count": 100000,
+  "repeats": 5,
+  "seed": 73,
+  "backends": [
+    "python",
+    "cpp"
+  ],
+  "workloads": [
+    "crossing",
+    "resting",
+    "cancel_replace",
+    "mixed"
+  ],
+  "source_sha256": "2465ab3c066be4b88dfadcb2b70970b871813c5c78975cbff3bc383353edaed5",
+  "environment": {
+    "platform": "macOS-26.5.1-arm64-arm-64bit",
+    "processor": "arm",
+    "machine": "arm64",
+    "logical_cpus": 10,
+    "dependencies": {
+      "pybind11": "3.1.0",
+      "pytest": "9.1.1",
+      "hypothesis": "6.168.0",
+      "ruff": "0.16.8",
+      "matplotlib": "3.11.2"
+    },
+    "python": "3.12.14",
+    "gc_enabled": true,
+    "clock": {
+      "implementation": "mach_absolute_time()",
+      "monotonic": true,
+      "adjustable": false,
+      "resolution": 4.166666666666667e-08
+    },
+    "native_compiler": "Clang 18.1.6 (https://github.com/ziglang/zig-bootstrap 98bc6bf4fc4009888d33941daf6b600d20a42a56)",
+    "native_build": {
+      "schema": 1,
+      "command": [
+        ".venv/bin/python",
+        "-m",
+        "ziglang",
+        "c++",
+        "-target",
+        "aarch64-macos.14.0",
+        "-O3",
+        "-DNDEBUG",
+        "-std=c++17",
+        "-shared",
+        "-fPIC",
+        "-Wall",
+        "-Wextra",
+        "-Wpedantic",
+        "-fvisibility=hidden",
+        "-I/Users/anggun/.codex/.chatgpt-projects/g-p-6aa8e3b138948191a93774d6869d2c5d/redline-exchange/.venv/lib/python3.12/site-packages/pybind11/include",
+        "-I/Users/anggun/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/include/python3.12",
+        "/Users/anggun/.codex/.chatgpt-projects/g-p-6aa8e3b138948191a93774d6869d2c5d/redline-exchange/cpp/bindings.cpp",
+        "-o",
+        "/Users/anggun/.codex/.chatgpt-projects/g-p-6aa8e3b138948191a93774d6869d2c5d/redline-exchange/build/native-m5whg1rb/_native.cpython-312-darwin.so",
+        "-undefined",
+        "dynamic_lookup"
+      ],
+      "sources": {
+        "cpp/core.hpp": "da53d4a0c81a2a1e329f8fcd12ddfb8c3b3d8fcbdc0315211a02555f968fea23",
+        "cpp/bindings.cpp": "f53ac70ff285d480bebcc8a9ea8004b76e00dcd50f7b0e9c5ffd491271db7daa",
+        "scripts/build_native.py": "43abe737edb1569303723708ff52aef9caf5982ec30fd0a2a5f8cc36cd9b18f8",
+        "src/orderbook/build_info.py": "fba96c7658c8f8fd6ecc9d17a42f5615f2df7700f954c513222bfce41c29b47b"
+      },
+      "compiler": "clang version 18.1.6 (https://github.com/ziglang/zig-bootstrap 98bc6bf4fc4009888d33941daf6b600d20a42a56)",
+      "binary_sha256": "11303304d9b616996534f25cf36fa2af218473c579f47d0aa48088a495897b0a",
+      "python_cache_tag": "cpython-312",
+      "soabi": "cpython-312-darwin"
+    }
+  },
+  "inputs": {
+    "crossing": {
+      "sha256": "682dab5ff55f23688d6dcb8b38f1c0308910fb30300ef447951580e2d1c6c951",
+      "operation_mix": {
+        "submit_limit": 100000
+      },
+      "parity": {
+        "python": "d9b1dd811ab27ee114d1804db0e18e6c301a80a5c7cf1ae4ced6afe9e8d72d9a",
+        "cpp": "d9b1dd811ab27ee114d1804db0e18e6c301a80a5c7cf1ae4ced6afe9e8d72d9a"
+      }
+    },
+    "resting": {
+      "sha256": "401769304af9d335a63d6ea52212edb21f42035ff2b60a89b6fb6bd8dc1ea076",
+      "operation_mix": {
+        "submit_limit": 100000
+      },
+      "parity": {
+        "python": "b3e028bab13e414fb3daef3441cef50a5a1cc13db23a52ec905b6db28101bf85",
+        "cpp": "b3e028bab13e414fb3daef3441cef50a5a1cc13db23a52ec905b6db28101bf85"
+      }
+    },
+    "cancel_replace": {
+      "sha256": "622aaeff9e3cb6c83b4ac6524583d8142b8d0be49dbb40ed9cb2f692f217be58",
+      "operation_mix": {
+        "submit_limit": 25000,
+        "replace": 50000,
+        "cancel": 25000
+      },
+      "parity": {
+        "python": "3111af6c44e3ab5b4d2755789a931391125474a7085eaddce5fabd46b79b9e4a",
+        "cpp": "3111af6c44e3ab5b4d2755789a931391125474a7085eaddce5fabd46b79b9e4a"
+      }
+    },
+    "mixed": {
+      "sha256": "b1ce2f0fc2375474879bd0599297d1e5028303e9dc39b1966af676a7dbba7cb7",
+      "operation_mix": {
+        "submit_limit": 82798,
+        "replace": 1101,
+        "cancel": 1035,
+        "submit_market": 15066
+      },
+      "parity": {
+        "python": "c2fa2b194301632aed147ba69cfb2940fb8c4edaed2176aa3988ffa15c96876b",
+        "cpp": "c2fa2b194301632aed147ba69cfb2940fb8c4edaed2176aa3988ffa15c96876b"
+      }
+    }
+  },
+  "runs": [
+    {
+      "workload": "crossing",
+      "backend": "python",
+      "trial": 0,
+      "events": 100000,
+      "elapsed_seconds": 0.366453916,
+      "events_per_second": 272885.60889604467,
+      "p50_us": 2.458,
+      "p95_us": 8.334,
+      "p99_us": 12.875,
+      "trades": 79097,
+      "active_orders": 20750,
+      "operation_latency": {
+        "submit_limit": {
+          "p50_us": 2.458,
+          "p95_us": 8.334,
+          "p99_us": 12.875
+        }
+      }
+    },
+    {
+      "workload": "crossing",
+      "backend": "cpp",
+      "trial": 0,
+      "events": 100000,
+      "elapsed_seconds": 0.252926875,
+      "events_per_second": 395371.1917723255,
+      "p50_us": 1.458,
+      "p95_us": 6.25,
+      "p99_us": 9.417,
+      "trades": 79097,
+      "active_orders": 20750,
+      "operation_latency": {
+        "submit_limit": {
+          "p50_us": 1.458,
+          "p95_us": 6.25,
+          "p99_us": 9.417
+        }
+      }
+    },
+    {
+      "workload": "crossing",
+      "backend": "cpp",
+      "trial": 1,
+      "events": 100000,
+      "elapsed_seconds": 0.240060625,
+      "events_per_second": 416561.4415108684,
+      "p50_us": 1.375,
+      "p95_us": 6.125,
+      "p99_us": 8.458,
+      "trades": 79097,
+      "active_orders": 20750,
+      "operation_latency": {
+        "submit_limit": {
+          "p50_us": 1.375,
+          "p95_us": 6.125,
+          "p99_us": 8.458
+        }
+      }
+    },
+    {
+      "workload": "crossing",
+      "backend": "python",
+      "trial": 1,
+      "events": 100000,
+      "elapsed_seconds": 0.357289416,
+      "events_per_second": 279885.14498845383,
+      "p50_us": 2.459,
+      "p95_us": 8.458,
+      "p99_us": 13.25,
+      "trades": 79097,
+      "active_orders": 20750,
+      "operation_latency": {
+        "submit_limit": {
+          "p50_us": 2.459,
+          "p95_us": 8.458,
+          "p99_us": 13.25
+        }
+      }
+    },
+    {
+      "workload": "crossing",
+      "backend": "python",
+      "trial": 2,
+      "events": 100000,
+      "elapsed_seconds": 0.373387167,
+      "events_per_second": 267818.52414333244,
+      "p50_us": 2.625,
+      "p95_us": 9.333,
+      "p99_us": 14.709,
+      "trades": 79097,
+      "active_orders": 20750,
+      "operation_latency": {
+        "submit_limit": {
+          "p50_us": 2.625,
+          "p95_us": 9.333,
+          "p99_us": 14.709
+        }
+      }
+    },
+    {
+      "workload": "crossing",
+      "backend": "cpp",
+      "trial": 2,
+      "events": 100000,
+      "elapsed_seconds": 0.261736583,
+      "events_per_second": 382063.51918333094,
+      "p50_us": 1.833,
+      "p95_us": 7.625,
+      "p99_us": 11.25,
+      "trades": 79097,
+      "active_orders": 20750,
+      "operation_latency": {
+        "submit_limit": {
+          "p50_us": 1.833,
+          "p95_us": 7.625,
+          "p99_us": 11.25
+        }
+      }
+    },
+    {
+      "workload": "crossing",
+      "backend": "cpp",
+      "trial": 3,
+      "events": 100000,
+      "elapsed_seconds": 0.280676084,
+      "events_per_second": 356282.58230936417,
+      "p50_us": 1.458,
+      "p95_us": 6.334,
+      "p99_us": 10.042,
+      "trades": 79097,
+      "active_orders": 20750,
+      "operation_latency": {
+        "submit_limit": {
+          "p50_us": 1.458,
+          "p95_us": 6.334,
+          "p99_us": 10.042
+        }
+      }
+    },
+    {
+      "workload": "crossing",
+      "backend": "python",
+      "trial": 3,
+      "events": 100000,
+      "elapsed_seconds": 0.378457542,
+      "events_per_second": 264230.43248534336,
+      "p50_us": 2.459,
+      "p95_us": 8.542,
+      "p99_us": 13.75,
+      "trades": 79097,
+      "active_orders": 20750,
+      "operation_latency": {
+        "submit_limit": {
+          "p50_us": 2.459,
+          "p95_us": 8.542,
+          "p99_us": 13.75
+        }
+      }
+    },
+    {
+      "workload": "crossing",
+      "backend": "python",
+      "trial": 4,
+      "events": 100000,
+      "elapsed_seconds": 0.375206792,
+      "events_per_second": 266519.6956242732,
+      "p50_us": 2.625,
+      "p95_us": 9.5,
+      "p99_us": 15.208,
+      "trades": 79097,
+      "active_orders": 20750,
+      "operation_latency": {
+        "submit_limit": {
+          "p50_us": 2.625,
+          "p95_us": 9.5,
+          "p99_us": 15.208
+        }
+      }
+    },
+    {
+      "workload": "crossing",
+      "backend": "cpp",
+      "trial": 4,
+      "events": 100000,
+      "elapsed_seconds": 0.282234042,
+      "events_per_second": 354315.8695222173,
+      "p50_us": 1.708,
+      "p95_us": 7.5,
+      "p99_us": 11.333,
+      "trades": 79097,
+      "active_orders": 20750,
+      "operation_latency": {
+        "submit_limit": {
+          "p50_us": 1.708,
+          "p95_us": 7.5,
+          "p99_us": 11.333
+        }
+      }
+    },
+    {
+      "workload": "resting",
+      "backend": "python",
+      "trial": 0,
+      "events": 100000,
+      "elapsed_seconds": 0.263628334,
+      "events_per_second": 379321.8979261918,
+      "p50_us": 1.958,
+      "p95_us": 2.584,
+      "p99_us": 4.333,
+      "trades": 0,
+      "active_orders": 100000,
+      "operation_latency": {
+        "submit_limit": {
+          "p50_us": 1.958,
+          "p95_us": 2.584,
+          "p99_us": 4.333
+        }
+      }
+    },
+    {
+      "workload": "resting",
+      "backend": "cpp",
+      "trial": 0,
+      "events": 100000,
+      "elapsed_seconds": 0.11718675,
+      "events_per_second": 853338.7947016194,
+      "p50_us": 1.0,
+      "p95_us": 1.667,
+      "p99_us": 2.292,
+      "trades": 0,
+      "active_orders": 100000,
+      "operation_latency": {
+        "submit_limit": {
+          "p50_us": 1.0,
+          "p95_us": 1.667,
+          "p99_us": 2.292
+        }
+      }
+    },
+    {
+      "workload": "resting",
+      "backend": "cpp",
+      "trial": 1,
+      "events": 100000,
+      "elapsed_seconds": 0.109872042,
+      "events_per_second": 910149.6448022692,
+      "p50_us": 0.959,
+      "p95_us": 1.584,
+      "p99_us": 2.167,
+      "trades": 0,
+      "active_orders": 100000,
+      "operation_latency": {
+        "submit_limit": {
+          "p50_us": 0.959,
+          "p95_us": 1.584,
+          "p99_us": 2.167
+        }
+      }
+    },
+    {
+      "workload": "resting",
+      "backend": "python",
+      "trial": 1,
+      "events": 100000,
+      "elapsed_seconds": 0.26475775,
+      "events_per_second": 377703.7688226312,
+      "p50_us": 1.958,
+      "p95_us": 2.5,
+      "p99_us": 4.042,
+      "trades": 0,
+      "active_orders": 100000,
+      "operation_latency": {
+        "submit_limit": {
+          "p50_us": 1.958,
+          "p95_us": 2.5,
+          "p99_us": 4.042
+        }
+      }
+    },
+    {
+      "workload": "resting",
+      "backend": "python",
+      "trial": 2,
+      "events": 100000,
+      "elapsed_seconds": 0.26436525,
+      "events_per_second": 378264.5411982097,
+      "p50_us": 1.958,
+      "p95_us": 2.5,
+      "p99_us": 4.167,
+      "trades": 0,
+      "active_orders": 100000,
+      "operation_latency": {
+        "submit_limit": {
+          "p50_us": 1.958,
+          "p95_us": 2.5,
+          "p99_us": 4.167
+        }
+      }
+    },
+    {
+      "workload": "resting",
+      "backend": "cpp",
+      "trial": 2,
+      "events": 100000,
+      "elapsed_seconds": 0.13776625,
+      "events_per_second": 725867.1844519249,
+      "p50_us": 1.041,
+      "p95_us": 1.709,
+      "p99_us": 2.625,
+      "trades": 0,
+      "active_orders": 100000,
+      "operation_latency": {
+        "submit_limit": {
+          "p50_us": 1.041,
+          "p95_us": 1.709,
+          "p99_us": 2.625
+        }
+      }
+    },
+    {
+      "workload": "resting",
+      "backend": "cpp",
+      "trial": 3,
+      "events": 100000,
+      "elapsed_seconds": 0.110601084,
+      "events_per_second": 904150.270353589,
+      "p50_us": 1.0,
+      "p95_us": 1.625,
+      "p99_us": 2.042,
+      "trades": 0,
+      "active_orders": 100000,
+      "operation_latency": {
+        "submit_limit": {
+          "p50_us": 1.0,
+          "p95_us": 1.625,
+          "p99_us": 2.042
+        }
+      }
+    },
+    {
+      "workload": "resting",
+      "backend": "python",
+      "trial": 3,
+      "events": 100000,
+      "elapsed_seconds": 0.291847917,
+      "events_per_second": 342644.2135614077,
+      "p50_us": 2.041,
+      "p95_us": 2.75,
+      "p99_us": 3.708,
+      "trades": 0,
+      "active_orders": 100000,
+      "operation_latency": {
+        "submit_limit": {
+          "p50_us": 2.041,
+          "p95_us": 2.75,
+          "p99_us": 3.708
+        }
+      }
+    },
+    {
+      "workload": "resting",
+      "backend": "python",
+      "trial": 4,
+      "events": 100000,
+      "elapsed_seconds": 0.300257708,
+      "events_per_second": 333047.2368755975,
+      "p50_us": 2.042,
+      "p95_us": 2.792,
+      "p99_us": 3.917,
+      "trades": 0,
+      "active_orders": 100000,
+      "operation_latency": {
+        "submit_limit": {
+          "p50_us": 2.042,
+          "p95_us": 2.792,
+          "p99_us": 3.917
+        }
+      }
+    },
+    {
+      "workload": "resting",
+      "backend": "cpp",
+      "trial": 4,
+      "events": 100000,
+      "elapsed_seconds": 0.135324208,
+      "events_per_second": 738966.0835849858,
+      "p50_us": 1.0,
+      "p95_us": 1.792,
+      "p99_us": 2.292,
+      "trades": 0,
+      "active_orders": 100000,
+      "operation_latency": {
+        "submit_limit": {
+          "p50_us": 1.0,
+          "p95_us": 1.792,
+          "p99_us": 2.292
+        }
+      }
+    },
+    {
+      "workload": "cancel_replace",
+      "backend": "python",
+      "trial": 0,
+      "events": 100000,
+      "elapsed_seconds": 0.110227416,
+      "events_per_second": 907215.3156525053,
+      "p50_us": 1.292,
+      "p95_us": 1.708,
+      "p99_us": 1.875,
+      "trades": 0,
+      "active_orders": 0,
+      "operation_latency": {
+        "submit_limit": {
+          "p50_us": 1.542,
+          "p95_us": 1.833,
+          "p99_us": 2.0
+        },
+        "replace": {
+          "p50_us": 1.042,
+          "p95_us": 1.375,
+          "p99_us": 1.5
+        },
+        "cancel": {
+          "p50_us": 1.333,
+          "p95_us": 1.458,
+          "p99_us": 1.584
+        }
+      }
+    },
+    {
+      "workload": "cancel_replace",
+      "backend": "cpp",
+      "trial": 0,
+      "events": 100000,
+      "elapsed_seconds": 0.089158416,
+      "events_per_second": 1121599.1096118172,
+      "p50_us": 0.792,
+      "p95_us": 1.541,
+      "p99_us": 1.625,
+      "trades": 0,
+      "active_orders": 0,
+      "operation_latency": {
+        "submit_limit": {
+          "p50_us": 0.916,
+          "p95_us": 1.167,
+          "p99_us": 1.375
+        },
+        "replace": {
+          "p50_us": 0.666,
+          "p95_us": 0.791,
+          "p99_us": 0.875
+        },
+        "cancel": {
+          "p50_us": 1.459,
+          "p95_us": 1.584,
+          "p99_us": 1.708
+        }
+      }
+    },
+    {
+      "workload": "cancel_replace",
+      "backend": "cpp",
+      "trial": 1,
+      "events": 100000,
+      "elapsed_seconds": 0.085297083,
+      "events_per_second": 1172373.0341399836,
+      "p50_us": 0.792,
+      "p95_us": 1.541,
+      "p99_us": 1.625,
+      "trades": 0,
+      "active_orders": 0,
+      "operation_latency": {
+        "submit_limit": {
+          "p50_us": 0.916,
+          "p95_us": 1.208,
+          "p99_us": 1.375
+        },
+        "replace": {
+          "p50_us": 0.625,
+          "p95_us": 0.791,
+          "p99_us": 0.875
+        },
+        "cancel": {
+          "p50_us": 1.459,
+          "p95_us": 1.584,
+          "p99_us": 1.708
+        }
+      }
+    },
+    {
+      "workload": "cancel_replace",
+      "backend": "python",
+      "trial": 1,
+      "events": 100000,
+      "elapsed_seconds": 0.1126905,
+      "events_per_second": 887386.2481753121,
+      "p50_us": 1.292,
+      "p95_us": 1.709,
+      "p99_us": 1.959,
+      "trades": 0,
+      "active_orders": 0,
+      "operation_latency": {
+        "submit_limit": {
+          "p50_us": 1.542,
+          "p95_us": 1.875,
+          "p99_us": 2.167
+        },
+        "replace": {
+          "p50_us": 1.042,
+          "p95_us": 1.416,
+          "p99_us": 1.583
+        },
+        "cancel": {
+          "p50_us": 1.333,
+          "p95_us": 1.458,
+          "p99_us": 1.667
+        }
+      }
+    },
+    {
+      "workload": "cancel_replace",
+      "backend": "python",
+      "trial": 2,
+      "events": 100000,
+      "elapsed_seconds": 0.113235583,
+      "events_per_second": 883114.6301423643,
+      "p50_us": 1.292,
+      "p95_us": 1.75,
+      "p99_us": 2.042,
+      "trades": 0,
+      "active_orders": 0,
+      "operation_latency": {
+        "submit_limit": {
+          "p50_us": 1.583,
+          "p95_us": 1.958,
+          "p99_us": 2.25
+        },
+        "replace": {
+          "p50_us": 1.042,
+          "p95_us": 1.458,
+          "p99_us": 1.625
+        },
+        "cancel": {
+          "p50_us": 1.333,
+          "p95_us": 1.459,
+          "p99_us": 1.709
+        }
+      }
+    },
+    {
+      "workload": "cancel_replace",
+      "backend": "cpp",
+      "trial": 2,
+      "events": 100000,
+      "elapsed_seconds": 0.08707225,
+      "events_per_second": 1148471.5279552324,
+      "p50_us": 0.792,
+      "p95_us": 1.5,
+      "p99_us": 1.625,
+      "trades": 0,
+      "active_orders": 0,
+      "operation_latency": {
+        "submit_limit": {
+          "p50_us": 0.916,
+          "p95_us": 1.25,
+          "p99_us": 1.5
+        },
+        "replace": {
+          "p50_us": 0.666,
+          "p95_us": 0.792,
+          "p99_us": 0.917
+        },
+        "cancel": {
+          "p50_us": 1.458,
+          "p95_us": 1.584,
+          "p99_us": 1.75
+        }
+      }
+    },
+    {
+      "workload": "cancel_replace",
+      "backend": "cpp",
+      "trial": 3,
+      "events": 100000,
+      "elapsed_seconds": 0.086939709,
+      "events_per_second": 1150222.391473613,
+      "p50_us": 0.792,
+      "p95_us": 1.542,
+      "p99_us": 1.708,
+      "trades": 0,
+      "active_orders": 0,
+      "operation_latency": {
+        "submit_limit": {
+          "p50_us": 0.916,
+          "p95_us": 1.333,
+          "p99_us": 1.709
+        },
+        "replace": {
+          "p50_us": 0.666,
+          "p95_us": 0.792,
+          "p99_us": 1.0
+        },
+        "cancel": {
+          "p50_us": 1.459,
+          "p95_us": 1.625,
+          "p99_us": 1.875
+        }
+      }
+    },
+    {
+      "workload": "cancel_replace",
+      "backend": "python",
+      "trial": 3,
+      "events": 100000,
+      "elapsed_seconds": 0.114264416,
+      "events_per_second": 875163.0953944578,
+      "p50_us": 1.292,
+      "p95_us": 1.75,
+      "p99_us": 2.0,
+      "trades": 0,
+      "active_orders": 0,
+      "operation_latency": {
+        "submit_limit": {
+          "p50_us": 1.583,
+          "p95_us": 1.958,
+          "p99_us": 2.208
+        },
+        "replace": {
+          "p50_us": 1.042,
+          "p95_us": 1.417,
+          "p99_us": 1.625
+        },
+        "cancel": {
+          "p50_us": 1.333,
+          "p95_us": 1.459,
+          "p99_us": 1.667
+        }
+      }
+    },
+    {
+      "workload": "cancel_replace",
+      "backend": "python",
+      "trial": 4,
+      "events": 100000,
+      "elapsed_seconds": 0.11282725,
+      "events_per_second": 886310.7095138807,
+      "p50_us": 1.292,
+      "p95_us": 1.75,
+      "p99_us": 2.0,
+      "trades": 0,
+      "active_orders": 0,
+      "operation_latency": {
+        "submit_limit": {
+          "p50_us": 1.542,
+          "p95_us": 1.917,
+          "p99_us": 2.167
+        },
+        "replace": {
+          "p50_us": 1.042,
+          "p95_us": 1.417,
+          "p99_us": 1.584
+        },
+        "cancel": {
+          "p50_us": 1.333,
+          "p95_us": 1.458,
+          "p99_us": 1.625
+        }
+      }
+    },
+    {
+      "workload": "cancel_replace",
+      "backend": "cpp",
+      "trial": 4,
+      "events": 100000,
+      "elapsed_seconds": 0.086936708,
+      "events_per_second": 1150262.0964207663,
+      "p50_us": 0.792,
+      "p95_us": 1.542,
+      "p99_us": 1.667,
+      "trades": 0,
+      "active_orders": 0,
+      "operation_latency": {
+        "submit_limit": {
+          "p50_us": 0.916,
+          "p95_us": 1.292,
+          "p99_us": 1.583
+        },
+        "replace": {
+          "p50_us": 0.666,
+          "p95_us": 0.792,
+          "p99_us": 0.958
+        },
+        "cancel": {
+          "p50_us": 1.459,
+          "p95_us": 1.625,
+          "p99_us": 1.875
+        }
+      }
+    },
+    {
+      "workload": "mixed",
+      "backend": "python",
+      "trial": 0,
+      "events": 100000,
+      "elapsed_seconds": 0.384733375,
+      "events_per_second": 259920.26296133004,
+      "p50_us": 2.667,
+      "p95_us": 8.375,
+      "p99_us": 12.417,
+      "trades": 89910,
+      "active_orders": 6741,
+      "operation_latency": {
+        "submit_limit": {
+          "p50_us": 2.458,
+          "p95_us": 7.958,
+          "p99_us": 11.375
+        },
+        "replace": {
+          "p50_us": 2.834,
+          "p95_us": 8.25,
+          "p99_us": 12.666
+        },
+        "cancel": {
+          "p50_us": 1.917,
+          "p95_us": 2.916,
+          "p99_us": 4.75
+        },
+        "submit_market": {
+          "p50_us": 5.25,
+          "p95_us": 10.666,
+          "p99_us": 15.084
+        }
+      }
+    },
+    {
+      "workload": "mixed",
+      "backend": "cpp",
+      "trial": 0,
+      "events": 100000,
+      "elapsed_seconds": 0.262225666,
+      "events_per_second": 381350.92390231544,
+      "p50_us": 2.042,
+      "p95_us": 6.334,
+      "p99_us": 9.167,
+      "trades": 89910,
+      "active_orders": 6741,
+      "operation_latency": {
+        "submit_limit": {
+          "p50_us": 1.417,
+          "p95_us": 6.084,
+          "p99_us": 8.167
+        },
+        "replace": {
+          "p50_us": 1.708,
+          "p95_us": 6.167,
+          "p99_us": 8.25
+        },
+        "cancel": {
+          "p50_us": 1.917,
+          "p95_us": 2.75,
+          "p99_us": 4.708
+        },
+        "submit_market": {
+          "p50_us": 4.209,
+          "p95_us": 7.917,
+          "p99_us": 10.833
+        }
+      }
+    },
+    {
+      "workload": "mixed",
+      "backend": "cpp",
+      "trial": 1,
+      "events": 100000,
+      "elapsed_seconds": 0.262999666,
+      "events_per_second": 380228.619758019,
+      "p50_us": 1.917,
+      "p95_us": 6.208,
+      "p99_us": 9.0,
+      "trades": 89910,
+      "active_orders": 6741,
+      "operation_latency": {
+        "submit_limit": {
+          "p50_us": 1.334,
+          "p95_us": 6.0,
+          "p99_us": 7.958
+        },
+        "replace": {
+          "p50_us": 1.542,
+          "p95_us": 6.166,
+          "p99_us": 8.834
+        },
+        "cancel": {
+          "p50_us": 1.916,
+          "p95_us": 2.666,
+          "p99_us": 4.375
+        },
+        "submit_market": {
+          "p50_us": 4.167,
+          "p95_us": 7.792,
+          "p99_us": 10.791
+        }
+      }
+    },
+    {
+      "workload": "mixed",
+      "backend": "python",
+      "trial": 1,
+      "events": 100000,
+      "elapsed_seconds": 0.381449417,
+      "events_per_second": 262157.95736817183,
+      "p50_us": 2.667,
+      "p95_us": 8.333,
+      "p99_us": 12.333,
+      "trades": 89910,
+      "active_orders": 6741,
+      "operation_latency": {
+        "submit_limit": {
+          "p50_us": 2.417,
+          "p95_us": 7.916,
+          "p99_us": 11.292
+        },
+        "replace": {
+          "p50_us": 2.792,
+          "p95_us": 8.208,
+          "p99_us": 13.166
+        },
+        "cancel": {
+          "p50_us": 1.916,
+          "p95_us": 2.834,
+          "p99_us": 4.792
+        },
+        "submit_market": {
+          "p50_us": 5.209,
+          "p95_us": 10.584,
+          "p99_us": 14.833
+        }
+      }
+    },
+    {
+      "workload": "mixed",
+      "backend": "python",
+      "trial": 2,
+      "events": 100000,
+      "elapsed_seconds": 0.385056292,
+      "events_per_second": 259702.28789301278,
+      "p50_us": 2.708,
+      "p95_us": 8.416,
+      "p99_us": 12.542,
+      "trades": 89910,
+      "active_orders": 6741,
+      "operation_latency": {
+        "submit_limit": {
+          "p50_us": 2.459,
+          "p95_us": 7.958,
+          "p99_us": 11.5
+        },
+        "replace": {
+          "p50_us": 2.875,
+          "p95_us": 8.25,
+          "p99_us": 13.042
+        },
+        "cancel": {
+          "p50_us": 1.917,
+          "p95_us": 3.083,
+          "p99_us": 4.917
+        },
+        "submit_market": {
+          "p50_us": 5.25,
+          "p95_us": 10.667,
+          "p99_us": 15.083
+        }
+      }
+    },
+    {
+      "workload": "mixed",
+      "backend": "cpp",
+      "trial": 2,
+      "events": 100000,
+      "elapsed_seconds": 0.257539167,
+      "events_per_second": 388290.45370019384,
+      "p50_us": 1.959,
+      "p95_us": 6.25,
+      "p99_us": 9.125,
+      "trades": 89910,
+      "active_orders": 6741,
+      "operation_latency": {
+        "submit_limit": {
+          "p50_us": 1.375,
+          "p95_us": 6.041,
+          "p99_us": 8.042
+        },
+        "replace": {
+          "p50_us": 1.625,
+          "p95_us": 6.209,
+          "p99_us": 9.542
+        },
+        "cancel": {
+          "p50_us": 1.917,
+          "p95_us": 2.541,
+          "p99_us": 3.917
+        },
+        "submit_market": {
+          "p50_us": 4.167,
+          "p95_us": 7.834,
+          "p99_us": 10.834
+        }
+      }
+    },
+    {
+      "workload": "mixed",
+      "backend": "cpp",
+      "trial": 3,
+      "events": 100000,
+      "elapsed_seconds": 0.264345125,
+      "events_per_second": 378293.33905817254,
+      "p50_us": 1.959,
+      "p95_us": 6.25,
+      "p99_us": 8.959,
+      "trades": 89910,
+      "active_orders": 6741,
+      "operation_latency": {
+        "submit_limit": {
+          "p50_us": 1.375,
+          "p95_us": 6.041,
+          "p99_us": 8.083
+        },
+        "replace": {
+          "p50_us": 1.625,
+          "p95_us": 6.25,
+          "p99_us": 8.375
+        },
+        "cancel": {
+          "p50_us": 1.917,
+          "p95_us": 2.583,
+          "p99_us": 3.959
+        },
+        "submit_market": {
+          "p50_us": 4.167,
+          "p95_us": 7.792,
+          "p99_us": 10.458
+        }
+      }
+    },
+    {
+      "workload": "mixed",
+      "backend": "python",
+      "trial": 3,
+      "events": 100000,
+      "elapsed_seconds": 0.378324792,
+      "events_per_second": 264323.1480320222,
+      "p50_us": 2.667,
+      "p95_us": 8.334,
+      "p99_us": 12.375,
+      "trades": 89910,
+      "active_orders": 6741,
+      "operation_latency": {
+        "submit_limit": {
+          "p50_us": 2.417,
+          "p95_us": 7.917,
+          "p99_us": 11.292
+        },
+        "replace": {
+          "p50_us": 2.791,
+          "p95_us": 8.084,
+          "p99_us": 12.5
+        },
+        "cancel": {
+          "p50_us": 1.917,
+          "p95_us": 2.917,
+          "p99_us": 4.083
+        },
+        "submit_market": {
+          "p50_us": 5.25,
+          "p95_us": 10.625,
+          "p99_us": 14.709
+        }
+      }
+    },
+    {
+      "workload": "mixed",
+      "backend": "python",
+      "trial": 4,
+      "events": 100000,
+      "elapsed_seconds": 0.380616125,
+      "events_per_second": 262731.90606414794,
+      "p50_us": 2.708,
+      "p95_us": 8.334,
+      "p99_us": 12.334,
+      "trades": 89910,
+      "active_orders": 6741,
+      "operation_latency": {
+        "submit_limit": {
+          "p50_us": 2.459,
+          "p95_us": 7.917,
+          "p99_us": 11.209
+        },
+        "replace": {
+          "p50_us": 2.792,
+          "p95_us": 8.25,
+          "p99_us": 12.625
+        },
+        "cancel": {
+          "p50_us": 1.917,
+          "p95_us": 2.833,
+          "p99_us": 4.416
+        },
+        "submit_market": {
+          "p50_us": 5.25,
+          "p95_us": 10.667,
+          "p99_us": 14.833
+        }
+      }
+    },
+    {
+      "workload": "mixed",
+      "backend": "cpp",
+      "trial": 4,
+      "events": 100000,
+      "elapsed_seconds": 0.260988791,
+      "events_per_second": 383158.21770292043,
+      "p50_us": 2.208,
+      "p95_us": 6.334,
+      "p99_us": 9.167,
+      "trades": 89910,
+      "active_orders": 6741,
+      "operation_latency": {
+        "submit_limit": {
+          "p50_us": 1.458,
+          "p95_us": 6.083,
+          "p99_us": 8.208
+        },
+        "replace": {
+          "p50_us": 1.708,
+          "p95_us": 6.25,
+          "p99_us": 8.125
+        },
+        "cancel": {
+          "p50_us": 1.959,
+          "p95_us": 2.833,
+          "p99_us": 4.334
+        },
+        "submit_market": {
+          "p50_us": 4.208,
+          "p95_us": 7.917,
+          "p99_us": 10.875
+        }
+      }
+    }
+  ]
+}

@@ -15,7 +15,7 @@ workload/parity helpers. No alternate C++ implementation was introduced.
 | Reporter | Deterministic text renderer with evidence IDs | Models do not need to rewrite numerical claims. No free-form causal story or real-market claim is accepted. |
 | Single-agent baseline | Same live research-agent role for planning and self-review | Same two decision points, context, tools and budgets. Separate reviewer role is the experimental difference; this is not a framework with autonomous conversations. |
 
-The workflow is `draft → validated → running → reviewing → completed` with
+The workflow is `draft → planning → validated → running → reviewing → completed` with
 `failed`, `canceled` and `interrupted` stops. Declines and clarification requests
 are visible failed runs with a readable explanation and no simulations started.
 Zero automatic plan revisions are used; a questionable study is returned as
@@ -192,18 +192,9 @@ Installed/tested versions are recorded below; no dependency upgrades were needed
 
 **Live integration is unverified here.** Mocked tests cover request shape,
 usage, redaction, transient retry, refusal/incomplete/invalid outputs and fake
-review citations. To run the opt-in comparative evaluation after configuring a
-compatible account-accessible model:
-
-```bash
-python -m research_copilot.evaluate_live --output live-evaluation
-```
-
-This command makes billable provider calls. It runs 14 prompt cases per workflow,
-records actual outcomes/usage in SQLite and JSON, and explicitly marks the two
-statistical-fixture rows not run as live prompts. Use fresh output directories
-for independent repetitions. Numerical evidence validation does not prove
-semantic question/plan relevance; human assessment is still required.
+review citations. The v2 evaluation requires explicit authorization and a priced
+spending budget; credentials alone do not trigger evaluation requests.
+[Evaluation protocol, commands and measured/unmeasured results](RELIABILITY.md#evaluation-v2).
 
 ## API and UI
 
@@ -216,13 +207,17 @@ state, plan, counters, ordered action records and artifact names.
 not resolved against the filesystem. Errors use 404/409/422/429 where applicable.
 OpenAPI is available at `/docs` on the local service.
 
-The React app polls durable snapshots every 700 ms. It displays action summaries,
+The React app polls durable snapshots after each response, approximately every 700 ms,
+then stops at a terminal state. Selecting/resuming a run restarts polling. Server-owned
+OpenAPI generates its TypeScript request/response contracts. It displays action summaries,
 not hidden reasoning. Refresh/restart recovery uses the history list; selecting
 an old run reloads saved evidence. The exchange demo remains a separate process
 at port 8000; the research app is at 8001. Both use the same built frontend assets
 but separate APIs/databases. Browser tests run an isolated server at 8002.
 
-## Validation record
+## Historical initial validation record
+
+For the latest hardening results and limitations, see [Reliability](RELIABILITY.md).
 
 Baseline revision: `5dd9a922f61b1b8b812eba3a141ec79a4cd0e906`; 103 baseline tests.
 Local implementation validation on 2026-09-23: Python 3.12.14, Pydantic 2.13.5,

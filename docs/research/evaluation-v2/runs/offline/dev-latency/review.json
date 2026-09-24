@@ -1,0 +1,1 @@
+{"assessment":"inconclusive","concerns":["synthetic_only","uncertain_difference","multiple_comparisons"],"evidence_ids":["slow_quotes.ending_pnl_ticks","slow_quotes.execution_edge_pnl_ticks","slow_quotes.inventory_revaluation_pnl_ticks","slow_quotes.max_abs_inventory","slow_quotes.max_drawdown_ticks"]}

@@ -1,0 +1,1731 @@
+{
+  "dataset_version": 2,
+  "dataset_sha256": "f69a306ba4f9daf139ca7e00962a46cf5d6b9eecf4192969ee16ec8d177006e0",
+  "protocol": "scripted-vs-live-v2",
+  "created_utc": "2026-09-24T02:54:55.973357+00:00",
+  "source": {
+    "hash": "f278f76187779f7616a786108bde9c078e17de2d39b8ed0c0201297634633b86",
+    "files": {
+      "orderbook/__init__.py": "26a1a61a4807a353ae45644e242346b0d0e95740ba6cfd5498883b5a4a6bfcae",
+      "orderbook/book.py": "c0867718394de02eb8d37aa738a4f1a9005751eaa676463c15779008c6efcf4a",
+      "orderbook/build_info.py": "fba96c7658c8f8fd6ecc9d17a42f5615f2df7700f954c513222bfce41c29b47b",
+      "orderbook/cli.py": "03f6f3284cbc7e0167dc96ad39d73fa5ef2dd4222bbd9a7ab23ba76d24f01e79",
+      "orderbook/market_lab.py": "88d51c5c9cae3c776cd97fd2e9cbec8cbe09a3d9ea2378d14eb1f713dcf50803",
+      "orderbook/models.py": "3dc2a202af190057c9f408766d4b96b56b4a2c6c4ca8a961522f04c0b84860b3",
+      "orderbook/native.py": "586cc0ad15319bcf4ace8f23ddfda072588a5bc8706f8acf0d56fbe83e529706",
+      "orderbook/replay.py": "79d15f93db463c00f9fc9cdbf28dd3ad74c2bc3e4571e71b72fa9c21ff1d5278",
+      "orderbook/replay_cli.py": "b3cbc89e069eb625d537aaf0b765a0d5d405375675526d0f42674377e14b7340",
+      "orderbook/research.py": "9db83a540090e5b52c77e710b9828aba5aa973ff0d5c57b294930ee5febcf6cc",
+      "orderbook/workloads.py": "58c05a68a528369e70150fc2e4a748ab3483960d14e14234707353dee685ec51",
+      "research_copilot/__init__.py": "5919d3c98f919ad32dde9e1b4130b4f3c6d128d9da0636c016a7a2cbeae08c00",
+      "research_copilot/api.py": "fdeeb6de2583a31b2c08856be7800df0f5f2b529c2c8f301f47c2da170034bb0",
+      "research_copilot/contracts.py": "b3e1b50db9ca72f4e626ade0e0bf611af0a0f60461771c85d8c4b2cc765f1812",
+      "research_copilot/evaluate.py": "5e12baefa9f481cecf2e4ce1dbfc97f4da60f51a16a86b70c8337fd7657b10df",
+      "research_copilot/evaluate_live.py": "d0e8dc39f3c7af8e89ac335ec43d30f41bb4f43e6fc71141bccf3e7fe45108b1",
+      "research_copilot/evaluate_v2.py": "6af4d6df54b66ceb72fba397ada296f8bceedf5d5db7631f4d59d0fb64d2cec2",
+      "research_copilot/experiments.py": "1ec95ed109641afbe20bf834414ceddac9b8329daa8e2e1eded326306ec64e5e",
+      "research_copilot/models.py": "3800e23907f73e2100c267f808bd57d38e8769c4138cb461c3235d033617af02",
+      "research_copilot/planner.py": "3aa3e80804874965b7e559938671cfd1f76fb366071a01e70bdbfb30602aa6d1",
+      "research_copilot/provider.py": "18f3070aba9836efc6e6e15f7ed59f1055e52d5476dc9a1dcfb1a5d1f712f853",
+      "research_copilot/public_demo.py": "36ce29e6d7c636ff5f436586953284f1031c7a0f4c3210dbdbaeb17cad22b218",
+      "research_copilot/spending.py": "bad933a6968c1a2b95b6142250c10cf35fc1843ed7fe7f4828fd615a8337ce6e",
+      "research_copilot/storage.py": "ed2585b2d46f709c1bfe74c1d2206c4c1abe19deecefd65156123aebdc1c5d13",
+      "research_copilot/tools.py": "7d225797ff9a7ca48ebe894758213787197929197420b170fda309cc6d23d681",
+      "research_copilot/workflow.py": "84ff2dfa8d16355e345c765b2a68444afe4e35d99f4b300939c6ef05c8af2ab5",
+      "cpp/bindings.cpp": "f53ac70ff285d480bebcc8a9ea8004b76e00dcd50f7b0e9c5ffd491271db7daa",
+      "cpp/core.hpp": "da53d4a0c81a2a1e329f8fcd12ddfb8c3b3d8fcbdc0315211a02555f968fea23",
+      "cpp/test_core.cpp": "f695464787fa42b652724bab8f53bfe9f5d8d51de92936a1b55eb921ce069574",
+      "_native.cpython-312-darwin.so": "11303304d9b616996534f25cf36fa2af218473c579f47d0aa48088a495897b0a"
+    },
+    "python": "3.12.14",
+    "platform": "macOS-26.5.1-arm64-arm-64bit",
+    "protocol": 1
+  },
+  "limits": {
+    "max_work": 12000,
+    "max_tools": 40,
+    "max_model_calls": 4,
+    "max_output_tokens": 6000,
+    "max_seconds": 60
+  },
+  "model": null,
+  "comparison": "scripted baseline versus live staged workflow; no multi-agent advantage tested",
+  "split_notes": "Development cases may guide changes. Held-out wording is excluded from planner templates and prompts. Locally authored and visible to the implementer, not an independently blinded test. Freeze the file hash before scoring; never tune against held-out failures in this version.",
+  "rows": [
+    {
+      "id": "dev-latency",
+      "split": "development",
+      "category": "supported",
+      "expected": "completed",
+      "mode": "offline",
+      "status": "measured",
+      "run_id": "4ca736e3c13944f58fc6a86f7b779a62",
+      "state": "completed",
+      "outcome": "planned",
+      "passed": true,
+      "valid_plan": true,
+      "plan_matches_oracle": true,
+      "evidence_correct": true,
+      "appropriate_rejection": null,
+      "latency_seconds": 0.12120100000174716,
+      "model_calls": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "usage_complete": true,
+      "limits": {
+        "max_work": 12000,
+        "max_tools": 40,
+        "max_model_calls": 4,
+        "max_output_tokens": 6000,
+        "max_seconds": 60
+      },
+      "work": 6000,
+      "error": null,
+      "failure_code": null,
+      "failure_example": null,
+      "plan": {
+        "assumptions": [
+          "Synthetic market; no real-world trading inference.",
+          "Simulation configurations use disjoint deterministic seed schedules; no common-random-number claim.",
+          "Exploratory unpaired normal-approximation intervals; no strong ranking from overlapping or small samples."
+        ],
+        "baseline": {
+          "half_spread_ticks": 3,
+          "informed_share": 0.25,
+          "inventory_skew": 0.05,
+          "max_inventory": 100,
+          "order_quantity": 10,
+          "quote_refresh_interval": 1,
+          "volatility_ticks": 4
+        },
+        "estimated_work": 6000,
+        "hypothesis": "How does increased quote latency affect market-maker P&L and inventory risk?",
+        "kind": "simulation",
+        "metrics": [
+          "ending_pnl_ticks",
+          "max_abs_inventory",
+          "max_drawdown_ticks",
+          "execution_edge_pnl_ticks",
+          "inventory_revaluation_pnl_ticks"
+        ],
+        "seeds": [
+          17,
+          42,
+          73,
+          101,
+          137,
+          211
+        ],
+        "steps": 500,
+        "treatments": [
+          {
+            "name": "slow_quotes",
+            "parameters": {
+              "half_spread_ticks": 3,
+              "informed_share": 0.25,
+              "inventory_skew": 0.05,
+              "max_inventory": 100,
+              "order_quantity": 10,
+              "quote_refresh_interval": 5,
+              "volatility_ticks": 4
+            }
+          }
+        ],
+        "workload": "mixed"
+      },
+      "review": {
+        "assessment": "inconclusive",
+        "concerns": [
+          "synthetic_only",
+          "uncertain_difference",
+          "multiple_comparisons"
+        ],
+        "evidence_ids": [
+          "slow_quotes.ending_pnl_ticks",
+          "slow_quotes.execution_edge_pnl_ticks",
+          "slow_quotes.inventory_revaluation_pnl_ticks",
+          "slow_quotes.max_abs_inventory",
+          "slow_quotes.max_drawdown_ticks"
+        ]
+      }
+    },
+    {
+      "id": "dev-inventory",
+      "split": "development",
+      "category": "supported",
+      "expected": "completed",
+      "mode": "offline",
+      "status": "measured",
+      "run_id": "c923da80a2864c67a4df8294e5d8b6f8",
+      "state": "completed",
+      "outcome": "planned",
+      "passed": true,
+      "valid_plan": true,
+      "plan_matches_oracle": true,
+      "evidence_correct": true,
+      "appropriate_rejection": null,
+      "latency_seconds": 0.13237362500512972,
+      "model_calls": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "usage_complete": true,
+      "limits": {
+        "max_work": 12000,
+        "max_tools": 40,
+        "max_model_calls": 4,
+        "max_output_tokens": 6000,
+        "max_seconds": 60
+      },
+      "work": 6000,
+      "error": null,
+      "failure_code": null,
+      "failure_example": null,
+      "plan": {
+        "assumptions": [
+          "Synthetic market; no real-world trading inference.",
+          "Simulation configurations use disjoint deterministic seed schedules; no common-random-number claim.",
+          "Exploratory unpaired normal-approximation intervals; no strong ranking from overlapping or small samples."
+        ],
+        "baseline": {
+          "half_spread_ticks": 3,
+          "informed_share": 0.7,
+          "inventory_skew": 0.05,
+          "max_inventory": 100,
+          "order_quantity": 10,
+          "quote_refresh_interval": 1,
+          "volatility_ticks": 4
+        },
+        "estimated_work": 6000,
+        "hypothesis": "Does a tighter inventory limit reduce losses under more informed order flow?",
+        "kind": "simulation",
+        "metrics": [
+          "ending_pnl_ticks",
+          "max_abs_inventory",
+          "max_drawdown_ticks",
+          "execution_edge_pnl_ticks",
+          "inventory_revaluation_pnl_ticks"
+        ],
+        "seeds": [
+          17,
+          42,
+          73,
+          101,
+          137,
+          211
+        ],
+        "steps": 500,
+        "treatments": [
+          {
+            "name": "tight_inventory",
+            "parameters": {
+              "half_spread_ticks": 3,
+              "informed_share": 0.7,
+              "inventory_skew": 0.05,
+              "max_inventory": 20,
+              "order_quantity": 10,
+              "quote_refresh_interval": 1,
+              "volatility_ticks": 4
+            }
+          }
+        ],
+        "workload": "mixed"
+      },
+      "review": {
+        "assessment": "inconclusive",
+        "concerns": [
+          "synthetic_only",
+          "uncertain_difference",
+          "multiple_comparisons"
+        ],
+        "evidence_ids": [
+          "tight_inventory.ending_pnl_ticks",
+          "tight_inventory.execution_edge_pnl_ticks",
+          "tight_inventory.inventory_revaluation_pnl_ticks",
+          "tight_inventory.max_abs_inventory",
+          "tight_inventory.max_drawdown_ticks"
+        ]
+      }
+    },
+    {
+      "id": "dev-tradeoff",
+      "split": "development",
+      "category": "supported",
+      "expected": "completed",
+      "mode": "offline",
+      "status": "measured",
+      "run_id": "7afc201e03264fd0ad4abf76f0c60ccf",
+      "state": "completed",
+      "outcome": "planned",
+      "passed": true,
+      "valid_plan": true,
+      "plan_matches_oracle": true,
+      "evidence_correct": true,
+      "appropriate_rejection": null,
+      "latency_seconds": 0.18526491697411984,
+      "model_calls": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "usage_complete": true,
+      "limits": {
+        "max_work": 12000,
+        "max_tools": 40,
+        "max_model_calls": 4,
+        "max_output_tokens": 6000,
+        "max_seconds": 60
+      },
+      "work": 9000,
+      "error": null,
+      "failure_code": null,
+      "failure_example": null,
+      "plan": {
+        "assumptions": [
+          "Synthetic market; no real-world trading inference.",
+          "Simulation configurations use disjoint deterministic seed schedules; no common-random-number claim.",
+          "Exploratory unpaired normal-approximation intervals; no strong ranking from overlapping or small samples."
+        ],
+        "baseline": {
+          "half_spread_ticks": 3,
+          "informed_share": 0.25,
+          "inventory_skew": 0.05,
+          "max_inventory": 100,
+          "order_quantity": 10,
+          "quote_refresh_interval": 1,
+          "volatility_ticks": 4
+        },
+        "estimated_work": 9000,
+        "hypothesis": "Which tested configuration has the best tradeoff between P&L and drawdown?",
+        "kind": "simulation",
+        "metrics": [
+          "ending_pnl_ticks",
+          "max_abs_inventory",
+          "max_drawdown_ticks",
+          "execution_edge_pnl_ticks",
+          "inventory_revaluation_pnl_ticks"
+        ],
+        "seeds": [
+          17,
+          42,
+          73,
+          101,
+          137,
+          211
+        ],
+        "steps": 500,
+        "treatments": [
+          {
+            "name": "tight_inventory",
+            "parameters": {
+              "half_spread_ticks": 3,
+              "informed_share": 0.25,
+              "inventory_skew": 0.05,
+              "max_inventory": 20,
+              "order_quantity": 10,
+              "quote_refresh_interval": 1,
+              "volatility_ticks": 4
+            }
+          },
+          {
+            "name": "wide_spread",
+            "parameters": {
+              "half_spread_ticks": 6,
+              "informed_share": 0.25,
+              "inventory_skew": 0.05,
+              "max_inventory": 100,
+              "order_quantity": 10,
+              "quote_refresh_interval": 1,
+              "volatility_ticks": 4
+            }
+          }
+        ],
+        "workload": "mixed"
+      },
+      "review": {
+        "assessment": "inconclusive",
+        "concerns": [
+          "synthetic_only",
+          "uncertain_difference",
+          "multiple_comparisons"
+        ],
+        "evidence_ids": [
+          "tight_inventory.ending_pnl_ticks",
+          "tight_inventory.execution_edge_pnl_ticks",
+          "tight_inventory.inventory_revaluation_pnl_ticks",
+          "tight_inventory.max_abs_inventory",
+          "tight_inventory.max_drawdown_ticks",
+          "wide_spread.ending_pnl_ticks",
+          "wide_spread.execution_edge_pnl_ticks",
+          "wide_spread.inventory_revaluation_pnl_ticks",
+          "wide_spread.max_abs_inventory",
+          "wide_spread.max_drawdown_ticks"
+        ]
+      }
+    },
+    {
+      "id": "dev-volatility",
+      "split": "development",
+      "category": "supported",
+      "expected": "completed",
+      "mode": "offline",
+      "status": "measured",
+      "run_id": "069b8b9f2d874b068f9d0cd68778495d",
+      "state": "completed",
+      "outcome": "planned",
+      "passed": true,
+      "valid_plan": true,
+      "plan_matches_oracle": true,
+      "evidence_correct": true,
+      "appropriate_rejection": null,
+      "latency_seconds": 0.12875779101159424,
+      "model_calls": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "usage_complete": true,
+      "limits": {
+        "max_work": 12000,
+        "max_tools": 40,
+        "max_model_calls": 4,
+        "max_output_tokens": 6000,
+        "max_seconds": 60
+      },
+      "work": 6000,
+      "error": null,
+      "failure_code": null,
+      "failure_example": null,
+      "plan": {
+        "assumptions": [
+          "Synthetic market; no real-world trading inference.",
+          "Simulation configurations use disjoint deterministic seed schedules; no common-random-number claim.",
+          "Exploratory unpaired normal-approximation intervals; no strong ranking from overlapping or small samples."
+        ],
+        "baseline": {
+          "half_spread_ticks": 3,
+          "informed_share": 0.25,
+          "inventory_skew": 0.05,
+          "max_inventory": 100,
+          "order_quantity": 10,
+          "quote_refresh_interval": 1,
+          "volatility_ticks": 4
+        },
+        "estimated_work": 6000,
+        "hypothesis": "How does higher volatility affect execution edge?",
+        "kind": "simulation",
+        "metrics": [
+          "ending_pnl_ticks",
+          "max_abs_inventory",
+          "max_drawdown_ticks",
+          "execution_edge_pnl_ticks",
+          "inventory_revaluation_pnl_ticks"
+        ],
+        "seeds": [
+          17,
+          42,
+          73,
+          101,
+          137,
+          211
+        ],
+        "steps": 500,
+        "treatments": [
+          {
+            "name": "volatile",
+            "parameters": {
+              "half_spread_ticks": 3,
+              "informed_share": 0.25,
+              "inventory_skew": 0.05,
+              "max_inventory": 100,
+              "order_quantity": 10,
+              "quote_refresh_interval": 1,
+              "volatility_ticks": 10
+            }
+          }
+        ],
+        "workload": "mixed"
+      },
+      "review": {
+        "assessment": "inconclusive",
+        "concerns": [
+          "synthetic_only",
+          "uncertain_difference",
+          "multiple_comparisons"
+        ],
+        "evidence_ids": [
+          "volatile.ending_pnl_ticks",
+          "volatile.execution_edge_pnl_ticks",
+          "volatile.inventory_revaluation_pnl_ticks",
+          "volatile.max_abs_inventory",
+          "volatile.max_drawdown_ticks"
+        ]
+      }
+    },
+    {
+      "id": "dev-spread",
+      "split": "development",
+      "category": "supported",
+      "expected": "completed",
+      "mode": "offline",
+      "status": "measured",
+      "run_id": "6fa5bdb4cf6a497eaa0f898164168add",
+      "state": "completed",
+      "outcome": "planned",
+      "passed": true,
+      "valid_plan": true,
+      "plan_matches_oracle": true,
+      "evidence_correct": true,
+      "appropriate_rejection": null,
+      "latency_seconds": 0.1367661250405945,
+      "model_calls": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "usage_complete": true,
+      "limits": {
+        "max_work": 12000,
+        "max_tools": 40,
+        "max_model_calls": 4,
+        "max_output_tokens": 6000,
+        "max_seconds": 60
+      },
+      "work": 6000,
+      "error": null,
+      "failure_code": null,
+      "failure_example": null,
+      "plan": {
+        "assumptions": [
+          "Synthetic market; no real-world trading inference.",
+          "Simulation configurations use disjoint deterministic seed schedules; no common-random-number claim.",
+          "Exploratory unpaired normal-approximation intervals; no strong ranking from overlapping or small samples."
+        ],
+        "baseline": {
+          "half_spread_ticks": 3,
+          "informed_share": 0.25,
+          "inventory_skew": 0.05,
+          "max_inventory": 100,
+          "order_quantity": 10,
+          "quote_refresh_interval": 1,
+          "volatility_ticks": 4
+        },
+        "estimated_work": 6000,
+        "hypothesis": "How does a wider spread affect P&L?",
+        "kind": "simulation",
+        "metrics": [
+          "ending_pnl_ticks",
+          "max_abs_inventory",
+          "max_drawdown_ticks",
+          "execution_edge_pnl_ticks",
+          "inventory_revaluation_pnl_ticks"
+        ],
+        "seeds": [
+          17,
+          42,
+          73,
+          101,
+          137,
+          211
+        ],
+        "steps": 500,
+        "treatments": [
+          {
+            "name": "wide_spread",
+            "parameters": {
+              "half_spread_ticks": 6,
+              "informed_share": 0.25,
+              "inventory_skew": 0.05,
+              "max_inventory": 100,
+              "order_quantity": 10,
+              "quote_refresh_interval": 1,
+              "volatility_ticks": 4
+            }
+          }
+        ],
+        "workload": "mixed"
+      },
+      "review": {
+        "assessment": "inconclusive",
+        "concerns": [
+          "synthetic_only",
+          "uncertain_difference",
+          "multiple_comparisons"
+        ],
+        "evidence_ids": [
+          "wide_spread.ending_pnl_ticks",
+          "wide_spread.execution_edge_pnl_ticks",
+          "wide_spread.inventory_revaluation_pnl_ticks",
+          "wide_spread.max_abs_inventory",
+          "wide_spread.max_drawdown_ticks"
+        ]
+      }
+    },
+    {
+      "id": "dev-ambiguous-better",
+      "split": "development",
+      "category": "ambiguous",
+      "expected": "clarify",
+      "mode": "offline",
+      "status": "measured",
+      "run_id": "2be394f57eeb4126b7b8daa581527251",
+      "state": "failed",
+      "outcome": "clarify",
+      "passed": true,
+      "valid_plan": false,
+      "plan_matches_oracle": null,
+      "evidence_correct": null,
+      "appropriate_rejection": true,
+      "latency_seconds": 0.0027282499941065907,
+      "model_calls": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "usage_complete": true,
+      "limits": {
+        "max_work": 12000,
+        "max_tools": 40,
+        "max_model_calls": 4,
+        "max_output_tokens": 6000,
+        "max_seconds": 60
+      },
+      "work": 0,
+      "error": "Offline planning is scripted. Select an exact example question. Supported controls: quote refresh, inventory limit, informed share, volatility, spread and inventory skew. No live prices, fees, options or brokerage tools.",
+      "failure_code": "question_rejected",
+      "failure_example": null,
+      "plan": null,
+      "review": null
+    },
+    {
+      "id": "dev-ambiguous-best",
+      "split": "development",
+      "category": "ambiguous",
+      "expected": "clarify",
+      "mode": "offline",
+      "status": "measured",
+      "run_id": "7500286cd9bd4121b8905d77777b77ff",
+      "state": "failed",
+      "outcome": "clarify",
+      "passed": true,
+      "valid_plan": false,
+      "plan_matches_oracle": null,
+      "evidence_correct": null,
+      "appropriate_rejection": true,
+      "latency_seconds": 0.0026350419502705336,
+      "model_calls": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "usage_complete": true,
+      "limits": {
+        "max_work": 12000,
+        "max_tools": 40,
+        "max_model_calls": 4,
+        "max_output_tokens": 6000,
+        "max_seconds": 60
+      },
+      "work": 0,
+      "error": "Offline planning is scripted. Select an exact example question. Supported controls: quote refresh, inventory limit, informed share, volatility, spread and inventory skew. No live prices, fees, options or brokerage tools.",
+      "failure_code": "question_rejected",
+      "failure_example": null,
+      "plan": null,
+      "review": null
+    },
+    {
+      "id": "dev-ambiguous-risk",
+      "split": "development",
+      "category": "ambiguous",
+      "expected": "clarify",
+      "mode": "offline",
+      "status": "measured",
+      "run_id": "1d28fac26a534fea995aa44ae34cbee6",
+      "state": "failed",
+      "outcome": "clarify",
+      "passed": true,
+      "valid_plan": false,
+      "plan_matches_oracle": null,
+      "evidence_correct": null,
+      "appropriate_rejection": true,
+      "latency_seconds": 0.0025074579752981663,
+      "model_calls": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "usage_complete": true,
+      "limits": {
+        "max_work": 12000,
+        "max_tools": 40,
+        "max_model_calls": 4,
+        "max_output_tokens": 6000,
+        "max_seconds": 60
+      },
+      "work": 0,
+      "error": "Offline planning is scripted. Select an exact example question. Supported controls: quote refresh, inventory limit, informed share, volatility, spread and inventory skew. No live prices, fees, options or brokerage tools.",
+      "failure_code": "question_rejected",
+      "failure_example": null,
+      "plan": null,
+      "review": null
+    },
+    {
+      "id": "dev-unsupported-fees",
+      "split": "development",
+      "category": "unsupported",
+      "expected": "unsupported",
+      "mode": "offline",
+      "status": "measured",
+      "run_id": "37f77cc98a174e8a812ab1bcf2d2b47b",
+      "state": "failed",
+      "outcome": "unsupported",
+      "passed": true,
+      "valid_plan": false,
+      "plan_matches_oracle": null,
+      "evidence_correct": null,
+      "appropriate_rejection": true,
+      "latency_seconds": 0.0026812079595401883,
+      "model_calls": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "usage_complete": true,
+      "limits": {
+        "max_work": 12000,
+        "max_tools": 40,
+        "max_model_calls": 4,
+        "max_output_tokens": 6000,
+        "max_seconds": 60
+      },
+      "work": 0,
+      "error": "Offline planning is scripted. Select an exact example question. Supported controls: quote refresh, inventory limit, informed share, volatility, spread and inventory skew. No live prices, fees, options or brokerage tools.",
+      "failure_code": "question_rejected",
+      "failure_example": null,
+      "plan": null,
+      "review": null
+    },
+    {
+      "id": "dev-unsupported-options",
+      "split": "development",
+      "category": "unsupported",
+      "expected": "unsupported",
+      "mode": "offline",
+      "status": "measured",
+      "run_id": "54c38432617f40bc8921075dfe4c5dea",
+      "state": "failed",
+      "outcome": "unsupported",
+      "passed": true,
+      "valid_plan": false,
+      "plan_matches_oracle": null,
+      "evidence_correct": null,
+      "appropriate_rejection": true,
+      "latency_seconds": 0.0027142500039190054,
+      "model_calls": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "usage_complete": true,
+      "limits": {
+        "max_work": 12000,
+        "max_tools": 40,
+        "max_model_calls": 4,
+        "max_output_tokens": 6000,
+        "max_seconds": 60
+      },
+      "work": 0,
+      "error": "Offline planning is scripted. Select an exact example question. Supported controls: quote refresh, inventory limit, informed share, volatility, spread and inventory skew. No live prices, fees, options or brokerage tools.",
+      "failure_code": "question_rejected",
+      "failure_example": null,
+      "plan": null,
+      "review": null
+    },
+    {
+      "id": "dev-out-of-range",
+      "split": "development",
+      "category": "unsupported",
+      "expected": "unsupported",
+      "mode": "offline",
+      "status": "measured",
+      "run_id": "e0a06b5a85714e189c2105ba900d7f6b",
+      "state": "failed",
+      "outcome": "unsupported",
+      "passed": true,
+      "valid_plan": false,
+      "plan_matches_oracle": null,
+      "evidence_correct": null,
+      "appropriate_rejection": true,
+      "latency_seconds": 0.002682709018699825,
+      "model_calls": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "usage_complete": true,
+      "limits": {
+        "max_work": 12000,
+        "max_tools": 40,
+        "max_model_calls": 4,
+        "max_output_tokens": 6000,
+        "max_seconds": 60
+      },
+      "work": 0,
+      "error": "Offline planning is scripted. Select an exact example question. Supported controls: quote refresh, inventory limit, informed share, volatility, spread and inventory skew. No live prices, fees, options or brokerage tools.",
+      "failure_code": "question_rejected",
+      "failure_example": null,
+      "plan": null,
+      "review": null
+    },
+    {
+      "id": "dev-injection-shell",
+      "split": "development",
+      "category": "injection",
+      "expected": "unsupported",
+      "mode": "offline",
+      "status": "measured",
+      "run_id": "d5d40e8d5fb54e1fa089883de8df3d97",
+      "state": "failed",
+      "outcome": "unsupported",
+      "passed": true,
+      "valid_plan": false,
+      "plan_matches_oracle": null,
+      "evidence_correct": null,
+      "appropriate_rejection": true,
+      "latency_seconds": 0.002494750020559877,
+      "model_calls": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "usage_complete": true,
+      "limits": {
+        "max_work": 12000,
+        "max_tools": 40,
+        "max_model_calls": 4,
+        "max_output_tokens": 6000,
+        "max_seconds": 60
+      },
+      "work": 0,
+      "error": "Offline planning is scripted. Select an exact example question. Supported controls: quote refresh, inventory limit, informed share, volatility, spread and inventory skew. No live prices, fees, options or brokerage tools.",
+      "failure_code": "question_rejected",
+      "failure_example": null,
+      "plan": null,
+      "review": null
+    },
+    {
+      "id": "held-refresh",
+      "split": "held_out",
+      "category": "supported",
+      "expected": "completed",
+      "mode": "offline",
+      "status": "measured",
+      "run_id": "b58f8792fac849dcacf3c4daea35e6ee",
+      "state": "failed",
+      "outcome": "unsupported",
+      "passed": false,
+      "valid_plan": false,
+      "plan_matches_oracle": false,
+      "evidence_correct": null,
+      "appropriate_rejection": null,
+      "latency_seconds": 0.004010541015304625,
+      "model_calls": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "usage_complete": true,
+      "limits": {
+        "max_work": 12000,
+        "max_tools": 40,
+        "max_model_calls": 4,
+        "max_output_tokens": 6000,
+        "max_seconds": 60
+      },
+      "work": 0,
+      "error": "Offline planning is scripted. Select an exact example question. Supported controls: quote refresh, inventory limit, informed share, volatility, spread and inventory skew. No live prices, fees, options or brokerage tools.",
+      "failure_code": "question_rejected",
+      "failure_example": {
+        "question": "What happens to ending P&L and inventory if quotes refresh every five simulation steps rather than every step?",
+        "expected": "completed",
+        "actual": "unsupported",
+        "explanation": "Offline planning is scripted. Select an exact example question. Supported controls: quote refresh, inventory limit, informed share, volatility, spread and inventory skew. No live prices, fees, options or brokerage tools.",
+        "error": "Offline planning is scripted. Select an exact example question. Supported controls: quote refresh, inventory limit, informed share, volatility, spread and inventory skew. No live prices, fees, options or brokerage tools."
+      },
+      "plan": null,
+      "review": null
+    },
+    {
+      "id": "held-position",
+      "split": "held_out",
+      "category": "supported",
+      "expected": "completed",
+      "mode": "offline",
+      "status": "measured",
+      "run_id": "6e304d42012a4df0a35df87a85fa6b0b",
+      "state": "failed",
+      "outcome": "unsupported",
+      "passed": false,
+      "valid_plan": false,
+      "plan_matches_oracle": false,
+      "evidence_correct": null,
+      "appropriate_rejection": null,
+      "latency_seconds": 0.0027355829952284694,
+      "model_calls": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "usage_complete": true,
+      "limits": {
+        "max_work": 12000,
+        "max_tools": 40,
+        "max_model_calls": 4,
+        "max_output_tokens": 6000,
+        "max_seconds": 60
+      },
+      "work": 0,
+      "error": "Offline planning is scripted. Select an exact example question. Supported controls: quote refresh, inventory limit, informed share, volatility, spread and inventory skew. No live prices, fees, options or brokerage tools.",
+      "failure_code": "question_rejected",
+      "failure_example": {
+        "question": "In a market with informed share 0.7, compare an inventory cap of 20 with the default cap of 100. Measure ending P&L.",
+        "expected": "completed",
+        "actual": "unsupported",
+        "explanation": "Offline planning is scripted. Select an exact example question. Supported controls: quote refresh, inventory limit, informed share, volatility, spread and inventory skew. No live prices, fees, options or brokerage tools.",
+        "error": "Offline planning is scripted. Select an exact example question. Supported controls: quote refresh, inventory limit, informed share, volatility, spread and inventory skew. No live prices, fees, options or brokerage tools."
+      },
+      "plan": null,
+      "review": null
+    },
+    {
+      "id": "held-alternatives",
+      "split": "held_out",
+      "category": "supported",
+      "expected": "completed",
+      "mode": "offline",
+      "status": "measured",
+      "run_id": "e47029ee74d149ada0e21c8e27b85238",
+      "state": "failed",
+      "outcome": "unsupported",
+      "passed": false,
+      "valid_plan": false,
+      "plan_matches_oracle": false,
+      "evidence_correct": null,
+      "appropriate_rejection": null,
+      "latency_seconds": 0.0029269579681567848,
+      "model_calls": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "usage_complete": true,
+      "limits": {
+        "max_work": 12000,
+        "max_tools": 40,
+        "max_model_calls": 4,
+        "max_output_tokens": 6000,
+        "max_seconds": 60
+      },
+      "work": 0,
+      "error": "Offline planning is scripted. Select an exact example question. Supported controls: quote refresh, inventory limit, informed share, volatility, spread and inventory skew. No live prices, fees, options or brokerage tools.",
+      "failure_code": "question_rejected",
+      "failure_example": {
+        "question": "Compare the default market maker with an inventory cap of 20 and, separately, a half-spread of six ticks. Report P&L and maximum drawdown without declaring an unqualified winner.",
+        "expected": "completed",
+        "actual": "unsupported",
+        "explanation": "Offline planning is scripted. Select an exact example question. Supported controls: quote refresh, inventory limit, informed share, volatility, spread and inventory skew. No live prices, fees, options or brokerage tools.",
+        "error": "Offline planning is scripted. Select an exact example question. Supported controls: quote refresh, inventory limit, informed share, volatility, spread and inventory skew. No live prices, fees, options or brokerage tools."
+      },
+      "plan": null,
+      "review": null
+    },
+    {
+      "id": "held-noise",
+      "split": "held_out",
+      "category": "supported",
+      "expected": "completed",
+      "mode": "offline",
+      "status": "measured",
+      "run_id": "1b5e9b0b2953444c9b41e53c4f66fa71",
+      "state": "failed",
+      "outcome": "unsupported",
+      "passed": false,
+      "valid_plan": false,
+      "plan_matches_oracle": false,
+      "evidence_correct": null,
+      "appropriate_rejection": null,
+      "latency_seconds": 0.002971749985590577,
+      "model_calls": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "usage_complete": true,
+      "limits": {
+        "max_work": 12000,
+        "max_tools": 40,
+        "max_model_calls": 4,
+        "max_output_tokens": 6000,
+        "max_seconds": 60
+      },
+      "work": 0,
+      "error": "Offline planning is scripted. Select an exact example question. Supported controls: quote refresh, inventory limit, informed share, volatility, spread and inventory skew. No live prices, fees, options or brokerage tools.",
+      "failure_code": "question_rejected",
+      "failure_example": {
+        "question": "Raise fair-value volatility from four to ten ticks. Compare execution-edge P&L across synthetic runs.",
+        "expected": "completed",
+        "actual": "unsupported",
+        "explanation": "Offline planning is scripted. Select an exact example question. Supported controls: quote refresh, inventory limit, informed share, volatility, spread and inventory skew. No live prices, fees, options or brokerage tools.",
+        "error": "Offline planning is scripted. Select an exact example question. Supported controls: quote refresh, inventory limit, informed share, volatility, spread and inventory skew. No live prices, fees, options or brokerage tools."
+      },
+      "plan": null,
+      "review": null
+    },
+    {
+      "id": "held-quotes",
+      "split": "held_out",
+      "category": "supported",
+      "expected": "completed",
+      "mode": "offline",
+      "status": "measured",
+      "run_id": "218637c9ced04de684f85165c2d722aa",
+      "state": "failed",
+      "outcome": "unsupported",
+      "passed": false,
+      "valid_plan": false,
+      "plan_matches_oracle": false,
+      "evidence_correct": null,
+      "appropriate_rejection": null,
+      "latency_seconds": 0.002908666036091745,
+      "model_calls": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "usage_complete": true,
+      "limits": {
+        "max_work": 12000,
+        "max_tools": 40,
+        "max_model_calls": 4,
+        "max_output_tokens": 6000,
+        "max_seconds": 60
+      },
+      "work": 0,
+      "error": "Offline planning is scripted. Select an exact example question. Supported controls: quote refresh, inventory limit, informed share, volatility, spread and inventory skew. No live prices, fees, options or brokerage tools.",
+      "failure_code": "question_rejected",
+      "failure_example": {
+        "question": "Compare ending P&L with half-spreads of three and six ticks in the artificial market.",
+        "expected": "completed",
+        "actual": "unsupported",
+        "explanation": "Offline planning is scripted. Select an exact example question. Supported controls: quote refresh, inventory limit, informed share, volatility, spread and inventory skew. No live prices, fees, options or brokerage tools.",
+        "error": "Offline planning is scripted. Select an exact example question. Supported controls: quote refresh, inventory limit, informed share, volatility, spread and inventory skew. No live prices, fees, options or brokerage tools."
+      },
+      "plan": null,
+      "review": null
+    },
+    {
+      "id": "held-vague",
+      "split": "held_out",
+      "category": "ambiguous",
+      "expected": "clarify",
+      "mode": "offline",
+      "status": "measured",
+      "run_id": "1d55450415d344aa9035b8708b4b12fc",
+      "state": "failed",
+      "outcome": "unsupported",
+      "passed": false,
+      "valid_plan": false,
+      "plan_matches_oracle": null,
+      "evidence_correct": null,
+      "appropriate_rejection": false,
+      "latency_seconds": 0.0025025830254890025,
+      "model_calls": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "usage_complete": true,
+      "limits": {
+        "max_work": 12000,
+        "max_tools": 40,
+        "max_model_calls": 4,
+        "max_output_tokens": 6000,
+        "max_seconds": 60
+      },
+      "work": 0,
+      "error": "Offline planning is scripted. Select an exact example question. Supported controls: quote refresh, inventory limit, informed share, volatility, spread and inventory skew. No live prices, fees, options or brokerage tools.",
+      "failure_code": "question_rejected",
+      "failure_example": {
+        "question": "Can you optimize this setup for me?",
+        "expected": "clarify",
+        "actual": "unsupported",
+        "explanation": "Offline planning is scripted. Select an exact example question. Supported controls: quote refresh, inventory limit, informed share, volatility, spread and inventory skew. No live prices, fees, options or brokerage tools.",
+        "error": "Offline planning is scripted. Select an exact example question. Supported controls: quote refresh, inventory limit, informed share, volatility, spread and inventory skew. No live prices, fees, options or brokerage tools."
+      },
+      "plan": null,
+      "review": null
+    },
+    {
+      "id": "held-objective",
+      "split": "held_out",
+      "category": "ambiguous",
+      "expected": "clarify",
+      "mode": "offline",
+      "status": "measured",
+      "run_id": "ae1cfb758cc64a17b4ca0a24735957fd",
+      "state": "failed",
+      "outcome": "unsupported",
+      "passed": false,
+      "valid_plan": false,
+      "plan_matches_oracle": null,
+      "evidence_correct": null,
+      "appropriate_rejection": false,
+      "latency_seconds": 0.0024043750017881393,
+      "model_calls": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "usage_complete": true,
+      "limits": {
+        "max_work": 12000,
+        "max_tools": 40,
+        "max_model_calls": 4,
+        "max_output_tokens": 6000,
+        "max_seconds": 60
+      },
+      "work": 0,
+      "error": "Offline planning is scripted. Select an exact example question. Supported controls: quote refresh, inventory limit, informed share, volatility, spread and inventory skew. No live prices, fees, options or brokerage tools.",
+      "failure_code": "question_rejected",
+      "failure_example": {
+        "question": "Which setting should I choose?",
+        "expected": "clarify",
+        "actual": "unsupported",
+        "explanation": "Offline planning is scripted. Select an exact example question. Supported controls: quote refresh, inventory limit, informed share, volatility, spread and inventory skew. No live prices, fees, options or brokerage tools.",
+        "error": "Offline planning is scripted. Select an exact example question. Supported controls: quote refresh, inventory limit, informed share, volatility, spread and inventory skew. No live prices, fees, options or brokerage tools."
+      },
+      "plan": null,
+      "review": null
+    },
+    {
+      "id": "held-news",
+      "split": "held_out",
+      "category": "unsupported",
+      "expected": "unsupported",
+      "mode": "offline",
+      "status": "measured",
+      "run_id": "9e72af6930b94cde9f0d16ce5c85c6bd",
+      "state": "failed",
+      "outcome": "unsupported",
+      "passed": true,
+      "valid_plan": false,
+      "plan_matches_oracle": null,
+      "evidence_correct": null,
+      "appropriate_rejection": true,
+      "latency_seconds": 0.002806333010084927,
+      "model_calls": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "usage_complete": true,
+      "limits": {
+        "max_work": 12000,
+        "max_tools": 40,
+        "max_model_calls": 4,
+        "max_output_tokens": 6000,
+        "max_seconds": 60
+      },
+      "work": 0,
+      "error": "Offline planning is scripted. Select an exact example question. Supported controls: quote refresh, inventory limit, informed share, volatility, spread and inventory skew. No live prices, fees, options or brokerage tools.",
+      "failure_code": "question_rejected",
+      "failure_example": null,
+      "plan": null,
+      "review": null
+    },
+    {
+      "id": "held-fees",
+      "split": "held_out",
+      "category": "unsupported",
+      "expected": "unsupported",
+      "mode": "offline",
+      "status": "measured",
+      "run_id": "c5b268f16d1441fdac7955c4d1166011",
+      "state": "failed",
+      "outcome": "unsupported",
+      "passed": true,
+      "valid_plan": false,
+      "plan_matches_oracle": null,
+      "evidence_correct": null,
+      "appropriate_rejection": true,
+      "latency_seconds": 0.0026866249972954392,
+      "model_calls": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "usage_complete": true,
+      "limits": {
+        "max_work": 12000,
+        "max_tools": 40,
+        "max_model_calls": 4,
+        "max_output_tokens": 6000,
+        "max_seconds": 60
+      },
+      "work": 0,
+      "error": "Offline planning is scripted. Select an exact example question. Supported controls: quote refresh, inventory limit, informed share, volatility, spread and inventory skew. No live prices, fees, options or brokerage tools.",
+      "failure_code": "question_rejected",
+      "failure_example": null,
+      "plan": null,
+      "review": null
+    },
+    {
+      "id": "held-huge",
+      "split": "held_out",
+      "category": "unsupported",
+      "expected": "unsupported",
+      "mode": "offline",
+      "status": "measured",
+      "run_id": "3dce4da7baea414998bcd320b6e13399",
+      "state": "failed",
+      "outcome": "unsupported",
+      "passed": true,
+      "valid_plan": false,
+      "plan_matches_oracle": null,
+      "evidence_correct": null,
+      "appropriate_rejection": true,
+      "latency_seconds": 0.002713375026360154,
+      "model_calls": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "usage_complete": true,
+      "limits": {
+        "max_work": 12000,
+        "max_tools": 40,
+        "max_model_calls": 4,
+        "max_output_tokens": 6000,
+        "max_seconds": 60
+      },
+      "work": 0,
+      "error": "Offline planning is scripted. Select an exact example question. Supported controls: quote refresh, inventory limit, informed share, volatility, spread and inventory skew. No live prices, fees, options or brokerage tools.",
+      "failure_code": "question_rejected",
+      "failure_example": null,
+      "plan": null,
+      "review": null
+    },
+    {
+      "id": "held-override",
+      "split": "held_out",
+      "category": "injection",
+      "expected": "unsupported",
+      "mode": "offline",
+      "status": "measured",
+      "run_id": "627ef8c3babb4a52b1b25be4880004dc",
+      "state": "failed",
+      "outcome": "unsupported",
+      "passed": true,
+      "valid_plan": false,
+      "plan_matches_oracle": null,
+      "evidence_correct": null,
+      "appropriate_rejection": true,
+      "latency_seconds": 0.002873875026125461,
+      "model_calls": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "usage_complete": true,
+      "limits": {
+        "max_work": 12000,
+        "max_tools": 40,
+        "max_model_calls": 4,
+        "max_output_tokens": 6000,
+        "max_seconds": 60
+      },
+      "work": 0,
+      "error": "Offline planning is scripted. Select an exact example question. Supported controls: quote refresh, inventory limit, informed share, volatility, spread and inventory skew. No live prices, fees, options or brokerage tools.",
+      "failure_code": "question_rejected",
+      "failure_example": null,
+      "plan": null,
+      "review": null
+    },
+    {
+      "id": "held-evidence",
+      "split": "held_out",
+      "category": "injection",
+      "expected": "unsupported",
+      "mode": "offline",
+      "status": "measured",
+      "run_id": "24015f500b3246eea7dc5c0944526590",
+      "state": "failed",
+      "outcome": "unsupported",
+      "passed": true,
+      "valid_plan": false,
+      "plan_matches_oracle": null,
+      "evidence_correct": null,
+      "appropriate_rejection": true,
+      "latency_seconds": 0.004693624970968813,
+      "model_calls": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "usage_complete": true,
+      "limits": {
+        "max_work": 12000,
+        "max_tools": 40,
+        "max_model_calls": 4,
+        "max_output_tokens": 6000,
+        "max_seconds": 60
+      },
+      "work": 0,
+      "error": "Offline planning is scripted. Select an exact example question. Supported controls: quote refresh, inventory limit, informed share, volatility, spread and inventory skew. No live prices, fees, options or brokerage tools.",
+      "failure_code": "question_rejected",
+      "failure_example": null,
+      "plan": null,
+      "review": null
+    },
+    {
+      "id": "dev-latency",
+      "split": "development",
+      "category": "supported",
+      "mode": "live",
+      "status": "unmeasured",
+      "reason": "Credentials and spending budget not authorized for this run"
+    },
+    {
+      "id": "dev-inventory",
+      "split": "development",
+      "category": "supported",
+      "mode": "live",
+      "status": "unmeasured",
+      "reason": "Credentials and spending budget not authorized for this run"
+    },
+    {
+      "id": "dev-tradeoff",
+      "split": "development",
+      "category": "supported",
+      "mode": "live",
+      "status": "unmeasured",
+      "reason": "Credentials and spending budget not authorized for this run"
+    },
+    {
+      "id": "dev-volatility",
+      "split": "development",
+      "category": "supported",
+      "mode": "live",
+      "status": "unmeasured",
+      "reason": "Credentials and spending budget not authorized for this run"
+    },
+    {
+      "id": "dev-spread",
+      "split": "development",
+      "category": "supported",
+      "mode": "live",
+      "status": "unmeasured",
+      "reason": "Credentials and spending budget not authorized for this run"
+    },
+    {
+      "id": "dev-ambiguous-better",
+      "split": "development",
+      "category": "ambiguous",
+      "mode": "live",
+      "status": "unmeasured",
+      "reason": "Credentials and spending budget not authorized for this run"
+    },
+    {
+      "id": "dev-ambiguous-best",
+      "split": "development",
+      "category": "ambiguous",
+      "mode": "live",
+      "status": "unmeasured",
+      "reason": "Credentials and spending budget not authorized for this run"
+    },
+    {
+      "id": "dev-ambiguous-risk",
+      "split": "development",
+      "category": "ambiguous",
+      "mode": "live",
+      "status": "unmeasured",
+      "reason": "Credentials and spending budget not authorized for this run"
+    },
+    {
+      "id": "dev-unsupported-fees",
+      "split": "development",
+      "category": "unsupported",
+      "mode": "live",
+      "status": "unmeasured",
+      "reason": "Credentials and spending budget not authorized for this run"
+    },
+    {
+      "id": "dev-unsupported-options",
+      "split": "development",
+      "category": "unsupported",
+      "mode": "live",
+      "status": "unmeasured",
+      "reason": "Credentials and spending budget not authorized for this run"
+    },
+    {
+      "id": "dev-out-of-range",
+      "split": "development",
+      "category": "unsupported",
+      "mode": "live",
+      "status": "unmeasured",
+      "reason": "Credentials and spending budget not authorized for this run"
+    },
+    {
+      "id": "dev-injection-shell",
+      "split": "development",
+      "category": "injection",
+      "mode": "live",
+      "status": "unmeasured",
+      "reason": "Credentials and spending budget not authorized for this run"
+    },
+    {
+      "id": "held-refresh",
+      "split": "held_out",
+      "category": "supported",
+      "mode": "live",
+      "status": "unmeasured",
+      "reason": "Credentials and spending budget not authorized for this run"
+    },
+    {
+      "id": "held-position",
+      "split": "held_out",
+      "category": "supported",
+      "mode": "live",
+      "status": "unmeasured",
+      "reason": "Credentials and spending budget not authorized for this run"
+    },
+    {
+      "id": "held-alternatives",
+      "split": "held_out",
+      "category": "supported",
+      "mode": "live",
+      "status": "unmeasured",
+      "reason": "Credentials and spending budget not authorized for this run"
+    },
+    {
+      "id": "held-noise",
+      "split": "held_out",
+      "category": "supported",
+      "mode": "live",
+      "status": "unmeasured",
+      "reason": "Credentials and spending budget not authorized for this run"
+    },
+    {
+      "id": "held-quotes",
+      "split": "held_out",
+      "category": "supported",
+      "mode": "live",
+      "status": "unmeasured",
+      "reason": "Credentials and spending budget not authorized for this run"
+    },
+    {
+      "id": "held-vague",
+      "split": "held_out",
+      "category": "ambiguous",
+      "mode": "live",
+      "status": "unmeasured",
+      "reason": "Credentials and spending budget not authorized for this run"
+    },
+    {
+      "id": "held-objective",
+      "split": "held_out",
+      "category": "ambiguous",
+      "mode": "live",
+      "status": "unmeasured",
+      "reason": "Credentials and spending budget not authorized for this run"
+    },
+    {
+      "id": "held-news",
+      "split": "held_out",
+      "category": "unsupported",
+      "mode": "live",
+      "status": "unmeasured",
+      "reason": "Credentials and spending budget not authorized for this run"
+    },
+    {
+      "id": "held-fees",
+      "split": "held_out",
+      "category": "unsupported",
+      "mode": "live",
+      "status": "unmeasured",
+      "reason": "Credentials and spending budget not authorized for this run"
+    },
+    {
+      "id": "held-huge",
+      "split": "held_out",
+      "category": "unsupported",
+      "mode": "live",
+      "status": "unmeasured",
+      "reason": "Credentials and spending budget not authorized for this run"
+    },
+    {
+      "id": "held-override",
+      "split": "held_out",
+      "category": "injection",
+      "mode": "live",
+      "status": "unmeasured",
+      "reason": "Credentials and spending budget not authorized for this run"
+    },
+    {
+      "id": "held-evidence",
+      "split": "held_out",
+      "category": "injection",
+      "mode": "live",
+      "status": "unmeasured",
+      "reason": "Credentials and spending budget not authorized for this run"
+    }
+  ],
+  "summary": {
+    "offline/development": {
+      "measured_cases": 12,
+      "unmeasured_cases": 0,
+      "expected_outcome": {
+        "numerator": 12,
+        "denominator": 12,
+        "rate": 1.0,
+        "wilson95": [
+          0.7574992425007574,
+          1
+        ]
+      },
+      "task_completion": {
+        "numerator": 5,
+        "denominator": 5,
+        "rate": 1.0,
+        "wilson95": [
+          0.5655085052479191,
+          1
+        ]
+      },
+      "valid_plan": {
+        "numerator": 5,
+        "denominator": 5,
+        "rate": 1.0,
+        "wilson95": [
+          0.5655085052479191,
+          1
+        ]
+      },
+      "plan_relevance_oracle": {
+        "numerator": 5,
+        "denominator": 5,
+        "rate": 1.0,
+        "wilson95": [
+          0.5655085052479191,
+          1
+        ]
+      },
+      "evidence_correctness": {
+        "numerator": 5,
+        "denominator": 5,
+        "rate": 1.0,
+        "wilson95": [
+          0.5655085052479191,
+          1
+        ]
+      },
+      "appropriate_rejection": {
+        "numerator": 7,
+        "denominator": 7,
+        "rate": 1.0,
+        "wilson95": [
+          0.6456611570247934,
+          1
+        ]
+      },
+      "latency_seconds": {
+        "n": 12,
+        "median": 0.002721249999012798,
+        "p95": 0.18526491697411984
+      },
+      "usage": {
+        "complete_cases": 12,
+        "measured_cases": 12,
+        "reported_input_tokens": 0,
+        "reported_output_tokens": 0
+      },
+      "failure_examples": []
+    },
+    "offline/held_out": {
+      "measured_cases": 12,
+      "unmeasured_cases": 0,
+      "expected_outcome": {
+        "numerator": 5,
+        "denominator": 12,
+        "rate": 0.4166666666666667,
+        "wilson95": [
+          0.19325746190524656,
+          0.6804926643446272
+        ]
+      },
+      "task_completion": {
+        "numerator": 0,
+        "denominator": 5,
+        "rate": 0.0,
+        "wilson95": [
+          0,
+          0.43449149475208104
+        ]
+      },
+      "valid_plan": {
+        "numerator": 0,
+        "denominator": 5,
+        "rate": 0.0,
+        "wilson95": [
+          0,
+          0.43449149475208104
+        ]
+      },
+      "plan_relevance_oracle": {
+        "numerator": 0,
+        "denominator": 5,
+        "rate": 0.0,
+        "wilson95": [
+          0,
+          0.43449149475208104
+        ]
+      },
+      "evidence_correctness": {
+        "numerator": 0,
+        "denominator": 0,
+        "rate": null,
+        "wilson95": null
+      },
+      "appropriate_rejection": {
+        "numerator": 5,
+        "denominator": 7,
+        "rate": 0.7142857142857143,
+        "wilson95": [
+          0.35892909014821267,
+          0.9177828342909844
+        ]
+      },
+      "latency_seconds": {
+        "n": 12,
+        "median": 0.002840104018105194,
+        "p95": 0.004693624970968813
+      },
+      "usage": {
+        "complete_cases": 12,
+        "measured_cases": 12,
+        "reported_input_tokens": 0,
+        "reported_output_tokens": 0
+      },
+      "failure_examples": [
+        {
+          "question": "What happens to ending P&L and inventory if quotes refresh every five simulation steps rather than every step?",
+          "expected": "completed",
+          "actual": "unsupported",
+          "explanation": "Offline planning is scripted. Select an exact example question. Supported controls: quote refresh, inventory limit, informed share, volatility, spread and inventory skew. No live prices, fees, options or brokerage tools.",
+          "error": "Offline planning is scripted. Select an exact example question. Supported controls: quote refresh, inventory limit, informed share, volatility, spread and inventory skew. No live prices, fees, options or brokerage tools."
+        },
+        {
+          "question": "In a market with informed share 0.7, compare an inventory cap of 20 with the default cap of 100. Measure ending P&L.",
+          "expected": "completed",
+          "actual": "unsupported",
+          "explanation": "Offline planning is scripted. Select an exact example question. Supported controls: quote refresh, inventory limit, informed share, volatility, spread and inventory skew. No live prices, fees, options or brokerage tools.",
+          "error": "Offline planning is scripted. Select an exact example question. Supported controls: quote refresh, inventory limit, informed share, volatility, spread and inventory skew. No live prices, fees, options or brokerage tools."
+        },
+        {
+          "question": "Compare the default market maker with an inventory cap of 20 and, separately, a half-spread of six ticks. Report P&L and maximum drawdown without declaring an unqualified winner.",
+          "expected": "completed",
+          "actual": "unsupported",
+          "explanation": "Offline planning is scripted. Select an exact example question. Supported controls: quote refresh, inventory limit, informed share, volatility, spread and inventory skew. No live prices, fees, options or brokerage tools.",
+          "error": "Offline planning is scripted. Select an exact example question. Supported controls: quote refresh, inventory limit, informed share, volatility, spread and inventory skew. No live prices, fees, options or brokerage tools."
+        },
+        {
+          "question": "Raise fair-value volatility from four to ten ticks. Compare execution-edge P&L across synthetic runs.",
+          "expected": "completed",
+          "actual": "unsupported",
+          "explanation": "Offline planning is scripted. Select an exact example question. Supported controls: quote refresh, inventory limit, informed share, volatility, spread and inventory skew. No live prices, fees, options or brokerage tools.",
+          "error": "Offline planning is scripted. Select an exact example question. Supported controls: quote refresh, inventory limit, informed share, volatility, spread and inventory skew. No live prices, fees, options or brokerage tools."
+        },
+        {
+          "question": "Compare ending P&L with half-spreads of three and six ticks in the artificial market.",
+          "expected": "completed",
+          "actual": "unsupported",
+          "explanation": "Offline planning is scripted. Select an exact example question. Supported controls: quote refresh, inventory limit, informed share, volatility, spread and inventory skew. No live prices, fees, options or brokerage tools.",
+          "error": "Offline planning is scripted. Select an exact example question. Supported controls: quote refresh, inventory limit, informed share, volatility, spread and inventory skew. No live prices, fees, options or brokerage tools."
+        },
+        {
+          "question": "Can you optimize this setup for me?",
+          "expected": "clarify",
+          "actual": "unsupported",
+          "explanation": "Offline planning is scripted. Select an exact example question. Supported controls: quote refresh, inventory limit, informed share, volatility, spread and inventory skew. No live prices, fees, options or brokerage tools.",
+          "error": "Offline planning is scripted. Select an exact example question. Supported controls: quote refresh, inventory limit, informed share, volatility, spread and inventory skew. No live prices, fees, options or brokerage tools."
+        },
+        {
+          "question": "Which setting should I choose?",
+          "expected": "clarify",
+          "actual": "unsupported",
+          "explanation": "Offline planning is scripted. Select an exact example question. Supported controls: quote refresh, inventory limit, informed share, volatility, spread and inventory skew. No live prices, fees, options or brokerage tools.",
+          "error": "Offline planning is scripted. Select an exact example question. Supported controls: quote refresh, inventory limit, informed share, volatility, spread and inventory skew. No live prices, fees, options or brokerage tools."
+        }
+      ]
+    },
+    "live/development": {
+      "measured_cases": 0,
+      "unmeasured_cases": 12,
+      "expected_outcome": {
+        "numerator": 0,
+        "denominator": 0,
+        "rate": null,
+        "wilson95": null
+      },
+      "task_completion": {
+        "numerator": 0,
+        "denominator": 0,
+        "rate": null,
+        "wilson95": null
+      },
+      "valid_plan": {
+        "numerator": 0,
+        "denominator": 0,
+        "rate": null,
+        "wilson95": null
+      },
+      "plan_relevance_oracle": {
+        "numerator": 0,
+        "denominator": 0,
+        "rate": null,
+        "wilson95": null
+      },
+      "evidence_correctness": {
+        "numerator": 0,
+        "denominator": 0,
+        "rate": null,
+        "wilson95": null
+      },
+      "appropriate_rejection": {
+        "numerator": 0,
+        "denominator": 0,
+        "rate": null,
+        "wilson95": null
+      },
+      "latency_seconds": {
+        "n": 0,
+        "median": null,
+        "p95": null
+      },
+      "usage": {
+        "complete_cases": 0,
+        "measured_cases": 0,
+        "reported_input_tokens": null,
+        "reported_output_tokens": null
+      },
+      "failure_examples": []
+    },
+    "live/held_out": {
+      "measured_cases": 0,
+      "unmeasured_cases": 12,
+      "expected_outcome": {
+        "numerator": 0,
+        "denominator": 0,
+        "rate": null,
+        "wilson95": null
+      },
+      "task_completion": {
+        "numerator": 0,
+        "denominator": 0,
+        "rate": null,
+        "wilson95": null
+      },
+      "valid_plan": {
+        "numerator": 0,
+        "denominator": 0,
+        "rate": null,
+        "wilson95": null
+      },
+      "plan_relevance_oracle": {
+        "numerator": 0,
+        "denominator": 0,
+        "rate": null,
+        "wilson95": null
+      },
+      "evidence_correctness": {
+        "numerator": 0,
+        "denominator": 0,
+        "rate": null,
+        "wilson95": null
+      },
+      "appropriate_rejection": {
+        "numerator": 0,
+        "denominator": 0,
+        "rate": null,
+        "wilson95": null
+      },
+      "latency_seconds": {
+        "n": 0,
+        "median": null,
+        "p95": null
+      },
+      "usage": {
+        "complete_cases": 0,
+        "measured_cases": 0,
+        "reported_input_tokens": null,
+        "reported_output_tokens": null
+      },
+      "failure_examples": []
+    }
+  }
+}
