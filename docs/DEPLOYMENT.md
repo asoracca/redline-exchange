@@ -15,7 +15,7 @@ No paid AI, disk, database, custom domain or paid service is configured.
 
 A Render account is required. In the dashboard, create a Blueprint from
 `https://github.com/asoracca/redline-exchange`, select branch
-`codex/research-copilot`, and use `render.yaml`. Confirm that the service plan is
+`main`, and use `render.yaml`. Confirm that the service plan is
 **Free**. Automatic redeployment is disabled; publish tested versions explicitly.
 Do not switch to a paid plan or add a persistent disk for this free demonstration.
 
